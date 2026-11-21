@@ -1,0 +1,15 @@
+# NatyaSutra
+
+NatyaSutra is an Indian classical dance e-learning website with public pages for classes, programmes, gurus, media, galleries, free lessons, and news.
+
+## Key Links
+
+- [Home](index.html)
+- [Classes](class-listing-page.html)
+- [Programmes](programmes-listing-page.html)
+- [Gurus](guru-listing-page.html)
+- [Dance Forms](dance-form-listing-page.html)
+- [Free Videos](free-video-listing-page.html)
+- [Preview Videos](preview-video-page.html)
+- [Media](media-page.html)
+- [Latest News](latest-news.html)

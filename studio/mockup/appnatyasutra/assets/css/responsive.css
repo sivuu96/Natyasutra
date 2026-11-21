@@ -1,0 +1,494 @@
+/* Site-wide responsive fixes — desktop, tablet, and mobile */
+
+/* ——— Global ——— */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+}
+
+.container-custom {
+  width: 100%;
+}
+
+/* ——— Section spacing ——— */
+@media (min-width: 768px) and (max-width: 1199.98px) { 
+  section.py-24, .py-24 {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+  .pb-24 {
+    padding-bottom: 4rem !important;
+  }
+  body .container-custom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+ }
+@media (max-width: 767px) {
+  .page-section {
+    padding: 1.5rem 0 1.5rem;
+  }
+  .page-section.section-mt-0 {
+      padding:0 0 2.5rem ;
+  }
+
+  section.py-24, .py-24 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  section.py-20 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+  .page-dance-form-about .page-guru-detail-grid {
+    padding: 12px;
+    box-shadow: none;
+  }
+  .pb-24 {
+    padding-bottom: 3rem !important;
+  }
+  body .container-custom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ——— Section headers ——— */
+
+@media (max-width: 575px) {
+  .page-section-head,
+  .page-listing-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .page-section-head.mob-row-head {
+    flex-direction: row;
+  }
+
+  .page-sort-dropdown {
+    width: fit-content;
+  }
+
+  .page-sort-dropdown-select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .programmes-listing-page .page-programmes-level-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .programmes-listing-page .page-programmes-category-pills {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .programmes-listing-page .page-programmes-category-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .programmes-listing-page .page-programmes-category-pill {
+    flex-shrink: 0;
+  }
+  section.py-24, .py-24 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+  .pb-24 {
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+/* ——— Filter bar ——— */
+
+@media (max-width: 767px) {
+  .page-filter-bar {
+    padding: 1.25rem 0;
+  }
+
+  .page-filter-bar-inner {
+    padding: 1.15rem;
+  }
+
+  .page-filter-fields {
+    gap: 1rem;
+  }
+
+  .page-filter-bar-inner .page-filter-apply {
+    width: 100%;
+  }
+  .latest-news-card {
+    width: 100% !important;
+  }
+  .auth-subtitle.sign-up-subtitle {
+    margin-inline-start: 0;
+  }
+}
+
+/* ——— Navbar ——— */
+
+@media (max-width: 1023px) {
+  nav .container-custom > .flex {
+    gap: 0.5rem;
+  }
+
+  nav .flex.items-center.space-x-6 {
+    gap: 0.35rem;
+  }
+  /* .news-updates-grid .grid-item:nth-last-child(-n+2) {
+    display: none;
+  } */
+}
+
+@media (max-width: 479px) {
+  nav .container-custom {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  nav img.h-10,
+  nav img.md\:h-12 {
+    height: 2rem;
+  }
+  nav .avatar-profile {
+    height: 2rem;
+    width: 2rem;
+  }
+  nav .navbar-brand {
+    height: 2rem;
+  }
+}
+
+/* ——— Index hero ——— */
+
+@media (max-width: 767px) {
+  .section-hero {
+    height: auto !important;
+    min-height: 72vh;
+    padding-top: 5rem;
+    padding-bottom: 2.5rem;
+    align-items: flex-end;
+  }
+
+  .section-hero .hero-content {
+    width: 100%;
+  }
+
+  .section-hero h1 br {
+    display: none;
+  }
+
+  .section-hero p br {
+    display: none;
+  }
+  .hero-help-title,
+  .hero-help-list {
+    display: none !important;
+  }
+  .desk-hidden {
+    display: block;
+  } 
+}
+
+@media (max-width: 479px) {
+  .section-hero {
+    min-height: 68vh;
+  }
+
+  .hero-help-trigger {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ——— Premium class cards (index + listing pages) ——— */
+
+.card-premium .relative.h-\[495px\] {
+  height: clamp(380px, 58vw, 495px);
+}
+
+@media (max-width: 767px) {
+  [data-popular-classes-grid],
+  .page-listing-premium-grid {
+    gap: 1.5rem !important;
+  }
+
+  .card-premium .card-content .flex.justify-between {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .card-premium .card-content .flex.justify-between > button {
+    width: 100%;
+    text-align: center;
+  }
+  .student-stories .section-title,
+  .section-title {
+    font-size: clamp(1.5rem, 4.5vw + 0.5rem, 1.85rem);
+  }
+  .section-popular-classes .text-xl {
+    font-size: 1.25rem;
+  }
+  /* .news-updates-grid .grid-item:nth-last-child(-n+2) {
+    display: none;
+  } */
+  .hero-content-inner .text-4xl {
+    font-size: 1.8rem;
+  }
+}
+
+/* ——— Popular classes section header ——— */
+
+@media (max-width: 767px) {
+  .dance-forms-popular-section .flex.flex-col.md\:flex-row {
+    align-items: stretch;
+    gap: 1.25rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .dance-forms-popular-section .relative.inline-block.text-left {
+    width: 100%;
+  }
+
+  .dance-forms-popular-section .relative.inline-block.text-left > .flex {
+    width: 100%;
+  }
+
+  .dance-forms-popular-section .relative.inline-block.text-left .relative {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dance-forms-popular-section [data-popular-classes-trigger],
+  .dance-forms-popular-section #classDropdownBtn {
+    width: 100%;
+  }
+}
+
+/* ——— Class detail page ——— */
+
+@media (max-width: 1023px) {
+  .class-detail-page .page-class-detail-top {
+    padding: 2.5rem 0 2.5rem;
+  }
+
+  .class-detail-page .page-class-detail-hero-grid {
+    gap: 2rem;
+  }
+
+  .class-detail-page .page-class-detail-guru-card img {
+    width: 100%;
+    /* max-height: 360px; */
+  }
+}
+
+@media (max-width: 767px) {
+  .class-detail-page .page-class-detail-price-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .class-detail-page .page-class-detail-price {
+    font-size: 2rem;
+  }
+
+  .class-detail-page .page-class-detail-complete {
+    white-space: normal;
+  }
+
+  .class-detail-page .page-class-detail-top .page-lesson-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .class-detail-page .page-class-detail-top .page-lesson-table {
+    min-width: 520px;
+  }
+
+  .class-detail-page .page-reviews-section {
+    padding: 2.5rem 0;
+  }
+
+  .class-detail-page .page-reviews-section .page-reviews-grid {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .class-detail-page .page-class-detail-thumbs {
+    gap: 0.5rem;
+  }
+
+  .class-detail-page .page-class-detail-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Free video detail ——— */
+
+@media (max-width: 1023px) {
+  .page-free-video-detail-stage {
+    padding: 2rem 0;
+  }
+
+  .page-free-video-detail-copy {
+    padding-top: 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-free-video-detail-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .page-free-video-detail-video-label {
+    left: 1rem;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+}
+
+/* ——— Listing page heroes ——— */
+
+@media (max-width: 767px) {
+  .preview-video-page .page-preview-video-listing-hero,
+  .programmes-listing-page .page-programmes-listing-hero {
+    gap: 1rem;
+  }
+
+  .page-guru-listing-hero {
+    padding: 2rem 0 2rem;
+  }
+
+  .page-hero {
+    padding: 1rem 0 1.25rem;
+  }
+}
+
+/* ——— Lesson tables (general) ——— */
+
+@media (max-width: 767px) {
+  .page-lesson-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-lesson-table {
+    min-width: 480px;
+  }
+}
+
+/* ——— Guru detail learning paths ——— */
+
+@media (max-width: 767px) {
+  .guru-detail-learning-paths .flex.flex-col.lg\:flex-row {
+    gap: 2rem;
+  }
+}
+
+/* ——— Dance form detail ——— */
+
+@media (max-width: 767px) {
+  .page-dance-form-detail-hero {
+    padding: 2rem 0.75rem 0;
+  }
+
+  .page-dance-form-detail-actions {
+    flex-direction: column;
+  }
+
+  .page-dance-form-detail-actions .btn-primary,
+  .page-dance-form-detail-actions .btn-pink-outline {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ——— Mudra detail ——— */
+
+@media (max-width: 767px) {
+  .mudra-detail-page .page-mudra-detail-copy p {
+    font-size: 1rem;
+  }
+
+  .mudra-detail-page .page-mudra-detail-figure img {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* ——— Footer ——— */
+
+@media (max-width: 767px) {
+  .site-footer .grid {
+    gap: 2rem;
+  }
+
+  .site-footer .site-footer-heading {
+    margin-bottom: 0.85rem;
+  }
+}
+
+/* ——— CTA band ——— */
+
+@media (max-width: 767px) {
+  .site-cta .flex.flex-col.sm\:flex-row {
+    gap: 0.75rem;
+  }
+
+  .site-cta .btn-primary,
+  .site-cta .btn-outline {
+    width: 100%;
+  }
+}
+
+/* ——— Carousels ——— */
+
+@media (max-width: 767px) {
+  .carousel-nav-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+/* ——— Gita Govinda highlight ——— */
+
+@media (max-width: 767px) {
+  .gita-govinda-highlight .gg-highlight-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .gita-govinda-highlight .gg-highlight-stat-divider {
+    display: none;
+  }
+}
+
+/* ——— Buttons ——— */
+
+@media (max-width: 479px) {
+  .btn-primary,
+  .btn-pink-outline,
+  .btn-outline {
+        font-size: 13px;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 0.7rem !important;
+        padding-bottom: 0.7rem !important;
+  }
+}

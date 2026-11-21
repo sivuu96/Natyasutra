@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NatyaSutra - Classical Dance E-learning Portal</title>
+    <meta name="description"
+        content="World's first Indian classical dance e-learning portal. Learn Bharatanatyam, Mohiniyattam, Kathak and more from legendary gurus.">
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="assets/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/images/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/images/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- favicon -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="preconnect">
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/navbar.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+
+<body class="bg-white free-video-detail-page">
+     <!-- Section 1: Header / Navbar -->
+    <nav class="bg-white border-b border-gray-100 py-4 sticky top-0 z-[100] transition-all duration-300">
+        <div class="container-custom flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="assets/images/natyasutra-logo.svg" alt="NatyaSutra" class="navbar-brand h-10 md:h-12">
+                </a>
+            </div>
+            <!-- Search, Contact & Profile -->
+            <div class="flex items-center space-x-6">
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center text-sm font-semibold text-gray-600 space-x-1">
+                    <div class="relative">
+                        <button id="danceClassesBtn"
+                            class="flex items-center space-x-1 hover:text-brand-pink transition-colors px-4 py-4 cursor-pointer focus:outline-none">
+                            <span class="text-gray-600 font-bold text-sm">Dance Classes</span>
+                            <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-brand-pink transition-colors"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Mega Menu Dropdown -->
+                        <div id="megaMenu" data-mega-menu
+                            class="mega-drop-menu absolute top-full left-1/2 -translate-x-[50%] w-[1000px] bg-white shadow-[0_30px_60px_rgba(45,11,42,0.12)] rounded-b-[2rem] border-t border-gray-100 transition-all duration-300 z-50 p-10 opacity-0 invisible">
+                            <div class="flex">
+                                <!-- Sidebar -->
+                                <div class="w-[280px] border-r border-gray-100 pr-8">
+                                    <ul class="space-y-1">
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Bharatanatyam</a>
+                                        </li>
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Mohiniyattam</a>
+                                        </li>
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Odissi</a>
+                                        </li>
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Kathak</a>
+                                        </li>
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Kuchipudi</a>
+                                        </li>
+                                        <li><a href="#"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Kathakali</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Grid Area -->
+                                <div class="flex-1 pl-10 grid grid-cols-4 gap-6">
+                                    <a href="#"
+                                        class="view-all text-brand-pink transition-colors cursor-pointer focus:outline-none hover:text-gray-900">View
+                                        All</a>
+                                    <!-- Item 1 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Angika</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rajasree Warrier</p>
+                                    </div>
+                                    <!-- Item 2 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                         <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Lament to the Birds</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 3 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                        <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Pushpanjali</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 4 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                           <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Swasam</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 5 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                       <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Bhogeendra Sayinam</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 6 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                          <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Aduvum Solluvaal</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 7 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Swasam</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                    <!-- Item 8 -->
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                           <img src="assets/images/classes/mobile/angika.webp" class="w-full h-full object-cover" alt="" title="">
+
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Swasam</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Rama Vaidyanathan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="text-gray-200">|</span>
+                    <div class="relative">
+                        <button id="programmesBtn"
+                            class="flex items-center space-x-1 hover:text-brand-pink transition-colors px-4 py-4 cursor-pointer focus:outline-none">
+                            <span class="text-gray-600 font-bold text-sm transition-colors">Programmes</span>
+                            <svg class="w-3.5 h-3.5 text-gray-600 group-hover:text-brand-pink transition-colors"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Programmes Mega Menu Dropdown -->
+                        <div id="programmesMegaMenu" data-mega-menu
+                            class="mega-drop-menu absolute top-full left-1/2 -translate-x-[65%] w-[1000px] bg-white shadow-[0_30px_60px_rgba(45,11,42,0.12)] rounded-b-[2rem] border-t border-gray-100 transition-all duration-300 z-50 p-10 opacity-0 invisible">
+                            <div class="flex">
+                                <!-- Sidebar -->
+                                <div class="w-[280px] border-r border-gray-100 pr-8">
+                                    <ul class="space-y-1">
+                                        <li><a href="beginners-level-listing.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Beginners</a>
+                                        </li>
+                                        <li><a href="programmes-listing-page.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Intermediate</a>
+                                        </li>
+                                        <li><a href="programmes-listing-page.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Master
+                                                Class</a></li>
+                                        <li><a href="programmes-listing-page.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Composition</a>
+                                        </li>
+                                        <li><a href="programmes-listing-page.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Technique</a>
+                                        </li>
+                                        <li><a href="programmes-listing-page.html"
+                                                class="block px-4 py-2.5 rounded-xl font-bold text-gray-900 hover:bg-brand-pink hover:text-white transition-all text-base font-sans">Performance</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Grid Area -->
+
+                                <div class="flex-1 pl-10 grid grid-cols-4 gap-6">
+
+                                    <a href="#"
+                                        class="view-all text-brand-pink transition-colors cursor-pointer focus:outline-none hover:text-gray-900">View
+                                        All</a>
+
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+                                   <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+                                    <div class="zoom-img-container cursor-pointer group">
+                                        <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 aspect-[1.3]">
+                                            <img src="assets/images/classes/mobile/thumri.webp"
+                                                class="w-full h-full object-cover" alt="Thumri Kanha Mains">
+                                        </div>
+                                        <h4
+                                            class="font-serif font-bold text-xs text-gray-900 leading-snug group-hover:text-brand-pink transition-colors">
+                                            Thumri Kanha Main</h4>
+                                        <p class="text-[10px] text-gray-600 mt-1 font-sans">Guru Dr Pali chandra</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search Bar -->
+                <div class="hidden xl:block relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" placeholder="Search"
+                        class="bg-gray-50 border border-gray-100 text-gray-700 text-sm rounded-full focus:ring-2 focus:ring-brand-pink/10 focus:border-brand-pink block w-64 pl-10 p-2.5 transition-all outline-none">
+                </div>
+
+                <!-- Contact Info -->
+                <div class="hidden md:flex items-center space-x-2 text-gray-700 font-bold text-sm">
+                    <svg class="w-4 h-4 text-brand-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                        </path>
+                    </svg>
+                    <span><a href="tel:+919446406749" class="hover:text-brand-pink text-gray-600 transition-colors"> +91
+                            94464 06749</a></span>
+                </div>
+
+                <!-- Cart -->
+                <div class="nav-dropdown-wrap" id="cartDropdownWrap">
+                    <button type="button" id="cartDropdownBtn" class="nav-cart-btn" aria-expanded="false"
+                        aria-haspopup="true" aria-label="Shopping cart, 3 items">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                        <span class="nav-cart-badge">3</span>
+                    </button>
+                    <div id="cartDropdownMenu" class="nav-dropdown-panel nav-dropdown-panel--cart" role="menu"
+                        aria-label="Cart items">
+                        <div class="px-5 py-4 border-b border-gray-100">
+                            <h3 class="text-sm font-bold text-gray-900 font-sans">Your Cart <span
+                                    class="text-gray-600 font-medium">(3)</span></h3>
+                        </div>
+                        <ul class="max-h-64 overflow-y-auto divide-y divide-gray-50">
+                            <li class="flex gap-3 px-5 py-3.5">
+                                <img src="assets/images/classes/beginners-lessons.webp" alt=""
+                                    class="w-14 h-14 rounded-lg object-cover shrink-0">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-semibold text-gray-900 font-sans truncate">Beginner Kathak
+                                        Lessons</p>
+                                    <p class="text-xs text-gray-600 font-sans mt-0.5">Guru Dr Pali Chandra</p>
+                                    <p class="text-sm font-bold text-brand-pink font-sans mt-1">₹2,499</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3 px-5 py-3.5">
+                                <img src="assets/images/classes/cholkettu.webp" alt=""
+                                    class="w-14 h-14 rounded-lg object-cover shrink-0">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-semibold text-gray-900 font-sans truncate">Cholkettu —
+                                        Mohiniyattam</p>
+                                    <p class="text-xs text-gray-600 font-sans mt-0.5">Dr Neena Prasad</p>
+                                    <p class="text-sm font-bold text-brand-pink font-sans mt-1">₹1,899</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3 px-5 py-3.5">
+                                <img src="assets/images/classes/angika.webp" alt=""
+                                    class="w-14 h-14 rounded-lg object-cover shrink-0">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-semibold text-gray-900 font-sans truncate">Angika
+                                    </p>
+                                    <p class="text-xs text-gray-600 font-sans mt-0.5">Rajasree Warrier</p>
+                                    <p class="text-sm font-bold text-brand-pink font-sans mt-1">₹2,199</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="px-5 py-4 border-t border-gray-100 bg-gray-50/80 rounded-b-2xl">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm text-gray-600 font-sans">Subtotal</span>
+                                <span class="text-base font-bold text-gray-900 font-sans">₹6,597</span>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <a href="#" class="btn-primary w-full text-sm py-2.5">Checkout</a>
+                                <a href="#" class="btn-pink-outline w-full text-sm py-2.5 bg-white">View Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div class="nav-dropdown-wrap" id="avatarDropdownWrap">
+                    <button type="button" id="avatarDropdownBtn" class="nav-avatar-btn" aria-expanded="false"
+                        aria-haspopup="true" aria-label="User account menu">
+                        <img src="assets/images/icons/avatar.webp" alt="User profile"
+                            class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm avatar-profile">
+                    </button>
+                    <div id="avatarDropdownMenu" class="nav-dropdown-panel nav-dropdown-panel--account" role="menu"
+                        aria-label="Account menu">
+                        <div class="px-5 py-4 border-b border-gray-100">
+                            <p class="text-sm font-bold text-gray-900 font-sans">Smitha Rajan</p>
+                            <p class="text-xs text-gray-600 font-sans mt-0.5 truncate">smitha@example.com</p>
+                        </div>
+                        <ul class="py-2">
+                            <li><a href="#"
+                                    class="block px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors font-sans"
+                                    role="menuitem">My Dashboard</a></li>
+                            <li><a href="#"
+                                    class="block px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors font-sans"
+                                    role="menuitem">My Courses</a></li>
+                            <li><a href="#"
+                                    class="block px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors font-sans"
+                                    role="menuitem">Wishlist</a></li>
+                            <li><a href="#"
+                                    class="block px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors font-sans"
+                                    role="menuitem">Account Settings</a></li>
+                        </ul>
+                        <div class="border-t border-gray-100 py-2">
+                            <a href="#"
+                                class="block px-5 py-2.5 text-sm font-semibold text-brand-pink hover:bg-brand-pink/5 transition-colors font-sans"
+                                role="menuitem">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn"
+                    class="lg:hidden text-gray-700 hover:text-brand-pink transition-colors focus:outline-none" aria-label="Open menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+<main id="main-content">
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu"
+        class="fixed inset-0 bg-white z-[200] transform translate-x-full transition-transform duration-500 lg:hidden overflow-y-auto">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-10">
+                <img src="assets/images/natyasutra-logo.svg" alt="NatyaSutra" class="h-10">
+                <button id="closeMobileMenu"
+                    class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-900 shadow-sm focus:outline-none hover:bg-brand-cream transition-colors" aria-label="Close menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <nav class="space-y-8">
+                <div>
+
+                    <ul class="space-y-5">
+                        <li><a href="#"
+                                class="text-1xl font-serif font-bold text-gray-900 hover:text-brand-pink transition-colors flex justify-between items-center">Dance
+                                Classes</a></li>
+                        <li><a href="#"
+                                class="text-1xl font-serif font-bold text-gray-900 hover:text-brand-pink transition-colors">Programmes</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pt-8 border-t border-gray-100">
+                    <h3 class="text-xs font-bold text-gray-600 uppercase tracking-widest mb-6 font-sans">Contact</h3>
+                    <p class="text-lg font-bold text-gray-900 mb-2 font-sans">+91 94464 06749</p>
+                    <p class="text-gray-600 font-sans">support@natyasutraonline.com</p>
+                </div>
+
+                <div class="pt-6">
+                    <a href="#" class="btn-primary w-full text-center">Join Now</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="page-forms-top">
+        <div class="container-custom">
+            <nav class="page-breadcrumb"><a href="index.html" class="hover:text-brand-pink">Home</a><span
+                    class="mx-2 text-gray-600">/</span><a href="free-video-page.html" class="hover:text-brand-pink">Free
+                    Videos</a><span class="mx-2 text-gray-600">/</span><span
+                    class="text-brand-pink font-semibold">Bharatanatyam</span></nav>
+            <h1 class="page-forms-title">Bharatanatyam Free Video</h1>
+        </div>
+    </div>
+
+    <div class="page-free-video-detail-stage py-24">
+        <div class="container-custom">
+            <div class="page-free-video-detail-grid">
+                <div class="page-free-video-detail-main">
+                    <div class="page-free-video-detail-player" data-free-video-player
+                        data-course-id="bharatanatyam-free-video">
+                        <div class="page-free-video-detail-video-stage">
+                            <iframe data-free-video-iframe
+                                src="https://www.youtube.com/embed/h7TNtO-WitU?rel=0&amp;modestbranding=1&amp;playsinline=1"
+                                title="Traditional Bharatanatyam" loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="page-free-video-detail-copy">
+                        <p>Bharatanatyam is one of the oldest classical dance traditions of India, celebrated for its
+                            sculptural geometry, expressive abhinaya, and rhythmic precision. This archive recording
+                            captures repertoire and performance elements for learners and rasikas alike.</p>
+                        <p>Anita Ratnam, Founder of Arangham, is a celebrated Bharatanatyam dancer and choreographer.
+                            Her work bridges traditional repertoire with contemporary stagecraft, making classical dance
+                            accessible to global audiences.</p>
+                        <p class="page-free-video-subtitles"><strong>Subtitles :</strong> English</p>
+                        <div class="page-free-video-compositions">
+                            <h2>Compositions</h2>
+                            <ol>
+                                <li>Ambika Pallavi</li>
+                                <li>Nadaloludhunam - Krishnaveni Lakshman</li>
+                                <li>Cholkettu - Lalita Srinivasan</li>
+                                <li>Oubavai Vilayattu - Smitha Rajan</li>
+                                <li>Swagatham - Chandrika Shar</li>
+                                <li>ABHINAYA - Expressions in Dance - Guru Anita Rathan</li>
+                                <li>Thillana - Guru Anita Rathan</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <aside class="page-free-video-detail-playlist" data-free-video-playlist>
+                    <button type="button" class="page-free-video-playlist-nav" data-free-video-playlist-prev
+                        aria-label="Previous videos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                        </svg></button>
+                    <div class="page-free-video-playlist-viewport" data-free-video-playlist-viewport>
+                        <div class="page-free-video-playlist-track" data-video-thumbs>
+                            <button type="button" class="page-free-video-playlist-item is-active" data-video-index="0"
+                                data-youtube-src="https://www.youtube.com/embed/h7TNtO-WitU?rel=0&amp;modestbranding=1&amp;playsinline=1"
+                                data-video-title="Traditional Bharatanatyam">
+                                <div class="page-free-video-playlist-copy"><strong>Priye Charusheele… (Ashtapdi)</strong><em
+                                        class="page-free-video-playlist-artist">Anita Ratnam</em></div><img
+                                    src="assets/images/free-lesson/ashtapthi-1.webp" alt="Traditional Bharatanatyam">
+                            </button>
+                            <button type="button" class="page-free-video-playlist-item" data-video-index="1"
+                                data-youtube-src="https://www.youtube.com/embed/h7TNtO-WitU?rel=0&amp;modestbranding=1&amp;playsinline=1"
+                                data-video-title="Bharatanatyam - A poem in motion">
+                                <div class="page-free-video-playlist-copy"><strong>Andal Kouthuvam... (In praise of Lord
+                                        Vishnu)</strong><em class="page-free-video-playlist-artist">Anita Ratnam</em></div><img
+                                    src="assets/images/free-lesson/ashtapthi-2.webp" alt="Bharatanatyam - A poem in motion">
+                            </button>
+                            <button type="button" class="page-free-video-playlist-item" data-video-index="2"
+                                data-youtube-src="https://www.youtube.com/embed/h7TNtO-WitU?rel=0&amp;modestbranding=1&amp;playsinline=1"
+                                data-video-title="Bharatanatyam - A poem in motion">
+                                <div class="page-free-video-playlist-copy"><strong>Andal Kouthuvam... (In praise of Lord
+                                        Vishnu)</strong><em class="page-free-video-playlist-artist">Anita Ratnam</em></div><img
+                                    src="assets/images/free-lesson/ashtapthi-1.webp" alt="Bharatanatyam - A poem in motion">
+                            </button>
+                            <button type="button" class="page-free-video-playlist-item" data-video-index="3"
+                                data-youtube-src="https://www.youtube.com/embed/h7TNtO-WitU?rel=0&amp;modestbranding=1&amp;playsinline=1"
+                                data-video-title="Traditional Bharatanatyam">
+                                <div class="page-free-video-playlist-copy"><strong>Priye Charusheele… (Ashtapdi)</strong><em
+                                        class="page-free-video-playlist-artist">Anita Ratnam</em></div><img
+                                    src="assets/images/free-lesson/ashtapthi-2.webp" alt="Traditional Bharatanatyam">
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="page-free-video-playlist-nav" data-free-video-playlist-next
+                        aria-label="Next videos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg></button>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-24 bg-[#fafafa] free-video-archives-carousel" aria-labelledby="free-video-archives-heading">
+        <div class="container-custom">
+            <div class="flex items-end justify-between gap-4">
+                <div class="text-start mb-8 md:mb-10">
+                    <h2 id="free-video-archives-heading" class="section-title mb-3">
+                        Performances from<br> Our Archives</h2>
+                    <p class="text-gray-600 text-sm md:text-base font-sans">Rare recordings preserving the beauty,
+                        history,
+                        and legacy of Indian classical dance.</p>
+                </div>
+                <div class="flex items-center justify-end gap-2 mb-6 md:mb-8"><button type="button" data-carousel-prev
+                        class="carousel-nav-btn" aria-label="Previous archives"><svg class="w-4 h-4" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg></button><button type="button" data-carousel-next class="carousel-nav-btn"
+                        aria-label="Next archives"><svg class="w-4 h-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg></button>
+                </div>
+            </div>
+
+
+            <div data-carousel data-per-view='{"default":1,"sm":2,"md":3,"lg":4}' data-step="1">
+                <div class="carousel-viewport -mx-2 sm:-mx-6">
+                    <div class="carousel-track px-2 sm:px-3">
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/kathakali.webp">             
+                                    <img src="assets/images/free-lesson/kathakali.webp"
+                                    alt="Kathakali performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>                            
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Kathakali</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/satriya.webp">             
+                                    <img src="assets/images/free-lesson/satriya.webp" alt="Satriya performance archive"
+                                    class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>                           
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Satriya</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-07.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-07.webp"
+                                    alt="Ottan Thullal performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Ottan Thullal</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-03.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-03.webp"
+                                    alt="Kutiyattam performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Kutiyattam</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-05.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-05.webp"
+                                    alt="Mohiniyattam performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                
+                                
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Mohiniyattam</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-02.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-02.webp"
+                                    alt="Kutiyattam performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Kutiyattam</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-05.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-05.webp"
+                                    alt="Kutiyattam performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Kutiyattam</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                        <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-slide px-2 sm:px-3">
+                            <a href="#"
+                                class="group block relative rounded-2xl overflow-hidden 0zoom-img-container focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2">
+                                <picture>
+                                    <source
+                                        media="(max-width: 768px)"
+                                        srcset="assets/images/free-lesson/free-lesson-06.webp">             
+                                    <img src="assets/images/free-lesson/free-lesson-06.webp"
+                                    alt="Kutiyattam performance archive" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                </picture>
+                                
+                                
+                                <div class="absolute inset-0 archive-card-overlay"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
+                                    <h3 class="text-lg md:text-xl font-bold font-serif mb-1">Kutiyattam</h3>
+                                    <span
+                                        class="text-sm font-semibold font-sans text-white/90 group-hover:text-white inline-flex items-center gap-1 transition-colors">Explore
+                                    <span aria-hidden="true">→</span></span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Section 4: Featured Dance Classes -->
+
+    <!-- Section 4: Featured Dance Classes -->
+    <div id="featured-classes" data-popular-classes
+        class="py-24 bg-[#fff] section-popular-classes">
+        <div class="container-custom">
+            <!-- Header with Category Dropdown -->
+            <div
+                class="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between lg:items-center md:items-center sm:items-center items-start gap-6 lg:mb-12 md:mb-8 sm:mb-6 mb-4 border-b border-gray-100 pb-8">
+                <div class="text-left">
+                    <h2 class="section-title mb-3">Explore Our Most <br>Popular Classes</h2>
+                    <p class="text-gray-600 text-sm md:text-base font-sans max-w-lg">
+                        Explore the lessons students, performers, teachers, and rasikas return to again and again.
+                    </p>
+                </div>
+                <!-- Custom Dropdown Menu for Category Filter -->
+                <div class="relative inline-block text-left z-40">
+                    <div
+                        class="flex lg:items-center md:items-start sm:items-start items-center gap-3 lg:flex-row md:flex-col sm:flex-col flex-row">
+                        <span class="text-sm font-semibold text-gray-600 font-sans">Sort by:</span>
+                        <div class="relative">
+                            <button id="classDropdownBtn" data-popular-classes-trigger type="button"
+                                class="flex items-center justify-between w-52 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 shadow-sm hover:border-brand-pink/40 hover:bg-brand-cream/10 focus:outline-none transition-all duration-300">
+                                <span id="classSelectedText" data-popular-classes-selected>Art Forms</span>
+                                <svg class="w-4 h-4 ml-2.5 text-gray-600 transition-transform duration-300"
+                                    id="classDropdownArrow" data-popular-classes-arrow fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="classDropdownMenu" data-popular-classes-menu
+                                class="absolute right-0 mt-2 w-52 rounded-xl bg-white border border-gray-100 shadow-[0_12px_30px_rgba(45,11,42,0.06)] py-1.5 z-50 hidden opacity-0 scale-95 origin-top-right transition-all duration-200">
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="art-forms">Art Forms</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="bharatanatyam">Bharatanatyam</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="mohiniyattam">Mohiniyattam</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="kathakali">Kathakali</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="kuchipudi">Kuchipudi</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="kathak">Kathak</button>
+                                <button type="button"
+                                    class="class-dropdown-option block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-brand-cream hover:text-brand-pink transition-colors"
+                                    data-value="odissi">Odissi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         <!-- Grid of 6 Composition Cards -->
+            <div id="compositionGrid" data-popular-classes-grid
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:gap-8 md:gap-5 sm:gap-4 gap-2">
+                <!-- Card 1 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between"
+                    data-category="bharatanatyam">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/angika.webp">
+                                <img src="assets/images/classes/angika.webp" alt="Angika" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Bharatanatyam</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Angika</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-1 group-hover:text-white">Dr
+                                Rajasree Warrier</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between"
+                    data-category="mohiniyattam">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/pralaya-payodhi-jale.webp">
+                                <img src="assets/images/classes/pralaya-payodhi-jale.webp" alt="Mohiniyattam"
+                                    class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Mohiniyattam</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Ashtapadi 1 Pralaya Payodhia</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-1 group-hover:text-white">Smitha
+                                Rajan</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between" data-category="odissi">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/odissi-beginners-lessons.webp">
+                                <img src="assets/images/classes/odissi-beginners-lessons.webp" alt="Odissi" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Odissi</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Odissi Beginners Lessons</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Sujata
+                                Mohapatra</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between" data-category="kathak">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/ghazal-woh-jo-hum-mein-tum-mein.webp">
+                                <img src="assets/images/classes/ghazal-woh-jo-hum-mein-tum-mein.webp" alt="Kathak" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Kathak</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Ghazal Woh Jo Hum Mein...</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Dr Pali
+                                Chandra</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between"
+                    data-category="kuchipudi">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/kuchipudi-beginners-lessons.webp">
+                                <img src="assets/images/classes/kuchipudi-beginners-lessons.webp" alt="Kuchipudi"
+                                    class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Kuchipudi</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Kuchipudi Beginners Lessons</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">
+                                Sreelakshmy Govardhanan</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="card-premium group zoom-img-container flex flex-col justify-between"
+                    data-category="kathakali">
+                    <div class="relative overflow-hidden">
+                        <div class="relative h-[495px] overflow-hidden">
+                            <picture>
+                                <source media="(max-width:420px)" srcset="assets/images/classes/mobile/aliveni-enthu-cheyvu.webp">
+                                <img src="assets/images/classes/aliveni-enthu-cheyvu.webp" alt="Kathakali"
+                                    class="w-full h-full object-cover" loading="lazy" decoding="async">
+                            </picture>
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="bg-[rgba(17,17,17,0.50)] text-white text-[10px] font-regular px-4 py-1.5 rounded-full capitalize tracking-wider font-sans">Mohiniyattam</span>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 card-content absolute bottom-0 left-0 right-0 bg-white group-hover:opacity-100 group-hover:bg-transparent transition-all duration-700 ease-out">
+                            <h3
+                                class="lg:text-2xl md:text-1xl sm:text-1xl text-xl font-bold text-gray-900 mb-1.5 font-serif group-hover:text-white transition-colors">
+                                Aliveni Enthu Cheyvu</h3>
+                            <p class="text-sm text-gray-600 font-sans font-medium mb-1 group-hover:text-white">Dr. Neena
+                                Prasad</p>
+                            <span
+                                class="block text-sm text-gray-600 font-sans font-medium mb-2 group-hover:text-white">Beginner</span>
+                            <!-- Metrics -->
+                            <div
+                                class="flex justify-between items-center space-x-2 text-xs text-gray-600 group-hover:text-white font-medium font-sans">
+                                <div class="flex items-center space-x-2">
+                                    <span class="flex items-center text-brand-gold">
+                                        <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                            </path>
+                                        </svg>
+                                        4.8
+                                    </span>
+                                    <span>•</span>
+                                    <span>3.2 Hours</span>
+                                    <span>•</span>
+                                    <span>24 Lessons</span>
+                                </div>
+
+                                <button
+                                    class="bg-transparent block py-2 px-3 text-md border border-gray-200 rounded-lg group-hover:bg-brand-pink group-hover:text-white group-hover:border-brand-pink font-semibold">Enroll
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center lg:mt-16 md:mt-12 sm:mt-8 mt-6">
+                <button class="btn-primary">View All Classes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 8: Student Stories (Testimonials Carousel) -->
+    <div class="py-24 bg-[#fafafa] student-stories">
+        <div class="container-custom text-center">
+            <h2 class="section-title mb-lg-4 mb-md-4 mb-sm-3 mb-2">Shared Stories Of Passion, <br> Dance And Performance
+            </h2>
+            <p
+                class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto mb-lg-14 mb-md-10 mb-sm-8 mb-6 leading-relaxed font-sans">
+                Testimonials of our students' transformative journeys</p>
+
+            <div data-carousel data-per-view='{"default":1,"md":2,"lg":3}' data-step="1" data-dots="true">
+                <div class="carousel-viewport -mx-3">
+                    <div class="carousel-track px-3">
+                        <div class="carousel-slide px-3">
+                            <article
+                                class="bg-[#ffffff] p-8 md:p-9 rounded-3xl text-left h-full flex flex-col relative min-h-[320px] border-2 border-gray-200 border-dashed">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="flex text-[#E8A317] space-x-0.5 text-md">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <span
+                                        class="text-5xl md:text-6xl text-brand-pink/25 font-serif leading-none select-none"
+                                        aria-hidden="true">
+                                        <img src="assets/images/icons/icon-quote.svg" alt="Quote icon"
+                                            class="w-8 h-8 md:w-10 md:h-10" loading="lazy" decoding="async">
+                                    </span>
+                                </div>
+                                <p
+                                    class="text-gray-700 text-sm md:text-[15px] leading-relaxed font-sans flex-grow mb-8">
+                                    Learning from Dr. Padma has been transformative. The online format makes it
+                                    accessible while maintaining the traditional rigor. I have gained confidence in my
+                                    practice and deepened my understanding of this beautiful art form.
+                                    
+                                </p>
+                                <div class="flex items-center gap-3 mt-auto">
+                                    <img src="assets/images/user.webp" alt="Priya Sharma"
+                                        class="w-11 h-11 rounded-full object-cover ring-2 ring-white" loading="lazy" decoding="async">
+                                    <div class="text-left">
+                                        <h3 class="h4 font-bold text-gray-900 text-sm font-sans">Priya Sharma</h3>
+                                        <p class="text-xs text-gray-600 font-sans">Mumbai, India</p>
+                                        <p class="text-xs text-brand-pink font-semibold font-sans mt-0.5">Bharatanatyam
+                                            Fundamentals</p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="carousel-slide px-3">
+                            <article
+                                class="bg-[#fff] p-8 md:p-9 rounded-3xl text-left h-full flex flex-col relative min-h-[320px] border-2 border-gray-200 border-dashed">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="flex text-[#E8A317] space-x-0.5 text-md">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <span
+                                        class="text-5xl md:text-6xl text-brand-pink/25 font-serif leading-none select-none"
+                                        aria-hidden="true">
+                                        <img src="assets/images/icons/icon-quote.svg" alt="Quote icon"
+                                            class="w-8 h-8 md:w-10 md:h-10" loading="lazy" decoding="async">
+                                    </span>
+                                </div>
+                                <p
+                                    class="text-gray-700 text-sm md:text-[15px] leading-relaxed font-sans flex-grow mb-8">
+                                    As someone living abroad, finding authentic classical dance training was
+                                    challenging. Natyasutraonline connected me with legendary gurus and a global
+                                    community of passionate learners.
+                                </p>
+                                <div class="flex items-center gap-3 mt-auto">
+                                    <img src="assets/images/user.webp" alt="Rahul Desai"
+                                        class="w-11 h-11 rounded-full object-cover ring-2 ring-white" loading="lazy" decoding="async">
+                                    <div class="text-left">
+                                        <h3 class="h4 font-bold text-gray-900 text-sm font-sans">Rahul Desai</h3>
+                                        <p class="text-xs text-gray-600 font-sans">San Francisco, USA</p>
+                                        <p class="text-xs text-brand-pink font-semibold font-sans mt-0.5">Kathak
+                                            Intermediate</p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="carousel-slide px-3">
+                            <article
+                                class="bg-[#fff] p-8 md:p-9 rounded-3xl text-left h-full flex flex-col relative min-h-[320px] border-2 border-gray-200 border-dashed">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="flex text-[#E8A317] space-x-0.5 text-md">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <span
+                                        class="text-5xl md:text-6xl text-brand-pink/25 font-serif leading-none select-none"
+                                        aria-hidden="true">
+                                        <img src="assets/images/icons/icon-quote.svg" alt="Quote icon"
+                                            class="w-8 h-8 md:w-10 md:h-10" loading="lazy" decoding="async">
+                                    </span>
+                                </div>
+                                <p
+                                    class="text-gray-700 text-sm md:text-[15px] leading-relaxed font-sans flex-grow mb-8">
+                                    The structured curriculum and personalized feedback have accelerated my progress
+                                    tremendously. The live classes feel intimate despite being virtual, and the recorded
+                                    library is invaluable for practice.
+                                </p>
+                                <div class="flex items-center gap-3 mt-auto">
+                                    <img src="assets/images/user.webp" alt="Anjali Menon"
+                                        class="w-11 h-11 rounded-full object-cover ring-2 ring-white" loading="lazy" decoding="async">
+                                    <div class="text-left">
+                                        <h3 class="h4 font-bold text-gray-900 text-sm font-sans">Anjali Menon</h3>
+                                        <p class="text-xs text-gray-600 font-sans">Bangalore, India</p>
+                                        <p class="text-xs text-brand-pink font-semibold font-sans mt-0.5">Odissi
+                                            Advanced</p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="carousel-slide px-3">
+                            <article
+                                class="bg-[#fff] p-8 md:p-9 rounded-3xl text-left h-full flex flex-col relative min-h-[320px] border-2 border-gray-200 border-dashed">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="flex text-[#E8A317] space-x-0.5 text-md">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <span
+                                        class="text-5xl md:text-6xl text-brand-pink/25 font-serif leading-none select-none"
+                                        aria-hidden="true">
+                                        <img src="assets/images/icons/icon-quote.svg" alt="Quote icon"
+                                            class="w-8 h-8 md:w-10 md:h-10" loading="lazy" decoding="async">
+                                    </span>
+                                </div>
+                                <p
+                                    class="text-gray-700 text-sm md:text-[15px] leading-relaxed font-sans flex-grow mb-8">
+                                    The step-by-step guidance from the gurus is amazing. I could learn the compositions
+                                    easily at my own pace while still feeling the depth of traditional training.
+                                </p>
+                                <div class="flex items-center gap-3 mt-auto">
+                                    <img src="assets/images/user.webp" alt="Meera Krishnan"
+                                        class="w-11 h-11 rounded-full object-cover ring-2 ring-white" loading="lazy" decoding="async">
+                                    <div class="text-left">
+                                        <h3 class="h4 font-bold text-gray-900 text-sm font-sans">Meera Krishnan</h3>
+                                        <p class="text-xs text-gray-600 font-sans">Chennai, India</p>
+                                        <p class="text-xs text-brand-pink font-semibold font-sans mt-0.5">Mohiniyattam
+                                            Beginners</p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="flex justify-center gap-2.5 mt-10" data-carousel-dots
+                    aria-label="Testimonial slides"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 12: Start Your Dance Journey Today -->
+    <div class="py-24 bg-[#f1f1f1] border-b border-gray-100 start-dance-journey">
+        <div class="container-custom text-center">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <h2 class="section-title">Begin Your Dance Journey Today</h2>
+                <p class="text-gray-600 text-sm md:text-base leading-relaxed font-sans max-w-xl mx-auto">
+                    Join thousands of students from 70+ countries preserving and celebrating the living art of Indian
+                    classical dance.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6 pt-6">
+                    <button id="getStartedNowBtn" class="btn-primary">Explore Classes</button>
+                    <button id="viewClassesBtn" class="btn-pink-outline bg-white">Join Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+<!-- Section 13: Footer Section -->
+    <footer class="site-footer text-white pt-16 md:pt-20 pb-8 md:pb-10">
+        <div class="container-custom">
+            <div
+                class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-10 mb-8 md:mb-16 text-left site-footer-grid">
+                <!-- Brand & Contact -->
+                <div class="col-span-2 sm:col-span-2 lg:col-span-5 space-y-6">
+                    <a href="index.html" class="inline-flex items-center gap-3 group" aria-label="NatyaSutra home">
+                        <img src="assets/images/natyasutra-logo-white.webp" alt="NatyaSutra" class="  w-full h-full" loading="lazy" decoding="async">
+
+                    </a>
+                    <p class="text-[16px] leading-relaxed site-footer-text font-sans max-w-md">
+                        The e-learning platform for Indian classical dance and culture. Learn from celebrated masters
+                        and join a global community of thousands of students across 70+ countries.
+                    </p>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="tel:+919446406749" class="site-footer-contact hover:text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
+                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                +91 94464 06749
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:contact@natyasutra.com"
+                                class="site-footer-contact hover:text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                contact@natyasutra.com
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="flex items-center gap-3 pt-1">
+                        <a href="#" class="site-footer-social" aria-label="Facebook">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="site-footer-social" aria-label="Instagram">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="site-footer-social" aria-label="X">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="site-footer-social" aria-label="YouTube">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dance -->
+                <div class="lg:col-span-2">
+                    <h3 class="h4 site-footer-heading">Dance</h3>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="site-footer-link">Home</a></li>
+                        <li><a href="class-listing-page.html" class="site-footer-link">Classes</a></li>
+                        <li><a href="programmes-listing-page.html" class="site-footer-link">Programmes</a></li>
+                        <li><a href="guru-listing-page.html" class="site-footer-link">Gurus</a></li>
+                        <li><a href="dance-form-listing-page.html" class="site-footer-link">Dance forms</a></li>
+                        <li><a href="#" class="site-footer-link">Gita govinda</a></li>
+                    </ul>
+                </div>
+
+                <!-- Explore -->
+                <div class="lg:col-span-2">
+                    <h3 class="h4 site-footer-heading">Explore</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="site-footer-link">Music</a></li>
+                        <li><a href="#" class="site-footer-link">Culture</a></li>
+                        <li><a href="#" class="site-footer-link">Nature</a></li>
+                        <li><a href="#" class="site-footer-link">Events</a></li>
+                        <li><a href="photo-gallery.html" class="site-footer-link">Photo Gallery</a></li>
+                        <li><a href="video-gallery-page.html" class="site-footer-link">Video Gallery</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div class="lg:col-span-3">
+                    <h3 class="h4 site-footer-heading">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="site-footer-link">About Us</a></li>
+                        <li><a href="media-page.html" class="site-footer-link">Media</a></li>
+                        <li><a href="latest-news.html" class="site-footer-link">Latest News</a></li>
+                        <li><a href="#" class="site-footer-link">Archives</a></li>
+                        <li><a href="#" class="site-footer-link">Ayursutra</a></li>
+                        <li><a href="#" class="site-footer-link">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom bar -->
+            <div class="site-footer-divider pt-8 space-y-4">
+                <nav class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] font-medium font-sans"
+                    aria-label="Legal links">
+                    <a href="#" class="site-footer-link">Sitemap</a>
+                    <span class="site-footer-legal-divider" aria-hidden="true">|</span>
+                    <a href="#" class="site-footer-link">Privacy policy</a>
+                    <span class="site-footer-legal-divider" aria-hidden="true">|</span>
+                    <a href="#" class="site-footer-link">Terms &amp; Conditions</a>
+                </nav>
+                <p class="text-[12px] md:text-[13px] site-footer-text font-sans leading-relaxed">
+                    &copy; Ayursutra Pvt. Ltd All Rights Reserved. Developed &amp; Maintained By
+                    <a href="#" class="site-footer-credit-link">Invis Pvt. Ltd</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/free-video-detail-player.js" async></script>
+    <script src="assets/js/popular-classes-filter.js" async></script>
+    <script src="assets/js/site-core.js" async></script>
+    <script src="assets/js/back-to-top.js" defer></script>
+</body>
+
+</html>
