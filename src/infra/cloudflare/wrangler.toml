@@ -1,0 +1,11 @@
+# Cloudflare Pages projects for the two static frontends.
+# Create the projects once in the dashboard (or with wrangler), then the deploy
+# workflow pushes each build to its project. The project names are GitHub variables:
+#   CF_PAGES_REACT_PROJECT and CF_PAGES_HTML_PROJECT.
+#
+# The API is not hosted here. It runs on AWS, and Cloudflare can proxy a custom
+# domain such as api.example.com to the load balancer.
+
+name = "natyasutra-react"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "dist"

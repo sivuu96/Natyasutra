@@ -1,0 +1,2 @@
+# Cloudflare Pages: send every route to the SPA shell so deep links work.
+/*  /index.html  200

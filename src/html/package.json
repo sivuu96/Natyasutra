@@ -1,0 +1,13 @@
+{
+  "name": "natyasutra-html",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify",
+    "build:copy": "mkdir -p dist && cp index.html dist/",
+    "build": "mkdir -p dist && npm run build:css && npm run build:copy"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  }
+}
