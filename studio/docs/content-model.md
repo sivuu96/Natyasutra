@@ -30,10 +30,11 @@ Items marked **Pending** are not yet decided. The decision log is section 12. De
 | `cnt_collection` | Grouping | Programmes, albums, playlists, galleries, collections | `tb_programme`, `tb_music_album`, `tb_collection`, `tb_pgallery`, `tb_vgallery`, `tb_music_list` (user rows) |
 | `cnt_media` | Media | Videos, tracks, photos, documents, audio | `tb_video`, `tb_freevideo`, `tb_music_track`, `tb_picture`, `tb_vgallery_videos`, `tb_product_video`, `tb_product_image`, `tb_category_cover_images` |
 | `cnt_article` | Article | Article-specific fields | `tb_latest_updates` |
-| `cnt_membership` | Link | Item to collection, with trailer flag and order | `tb_programme_video`, `tb_music_list` (user rows), gallery member links |
+| `cnt_membership` | Link | Item to collection, with preview flag and order | `tb_programme_video`, `tb_music_list` (user rows), gallery member links |
 | `cnt_item_media` | Link | Item to attached media (images, and audio for videos), by role | Image columns such as `home_page_image`, `share_img`, `banner_img`, `cover_image`, `thumb_image` |
 | `cnt_item_contributor` | Link | Item to contributor, by role | `tb_programme_artist`, `tb_music_album_artist`, `tb_music_artist` links |
 | `cnt_content_section` | Text | Keyed text sections on an item | `tb_programme_description`, `tb_product_description` |
+| `cnt_item_subtitle` | Text | Ordered list of short subtitle lines | `sub_head_1`, `sub_head_2` on `tb_programme` |
 | `cnt_item_category` | Link | Item to category | `tb_music_album_category`, `tb_latest_updates` category, programme and product category columns |
 | `cnt_tag` | Metadata | Tag vocabulary | Comma-separated `tags` columns on `tb_programme` and `tb_video` |
 | `cnt_item_tag` | Link | Item to tag | As above |
@@ -42,7 +43,7 @@ Items marked **Pending** are not yet decided. The decision log is section 12. De
 | `cnt_item_stats` | Read model | Views, clicks, purchases, ratings, rebuilt from events | `rate_1`–`rate_5`, `int_rate_1`–`int_rate_5`, `initial_view_count`, `actual_view_count`, `average_rating` on six tables |
 | `log_content_changes` | History | Edit history for content | No equivalent. New |
 
-Count: 14 `cnt_` tables, plus `log_content_changes`. The PDF lists 21 content tables, which is 7 more than this model. The difference comes from the consolidation: the separate music and gallery tables fold into the shared ones.
+Count: 15 `cnt_` tables, plus `log_content_changes`. The PDF lists 21 content tables, which is 7 more than this model. The difference comes from the consolidation: the separate music and gallery tables fold into the shared ones.
 
 Dimensions used by content are in section 4. Shared dimensions are in section 4.3.
 
@@ -61,7 +62,7 @@ Dimensions used by content are in section 4. Shared dimensions are in section 4.
 - `kind`: `collection`, `media`, `article` or `product`. This says which detail table holds the rest of the row. Within collections and media, the finer type is in their own tables.
 - `slug`: URL slug, unique within a kind.
 - `title`, `short_description`: the card projection that every layout needs.
-- `status`: `draft`, `review`, `published` or `archived`. Only `published` rows are visible to the public.
+- `status`: `draft`, `review`, `published` or `archived`. Only `published` rows are visible to the public. Legacy codes map as in section 6.9 (decision 17).
 - `visibility`: `public`, `members` (signed in) or `hidden` (direct link only).
 - `language_id`: the content's primary language.
 - `published_from`, `published_to`: a publish window. Lets content go live and expire without a status change.
@@ -116,7 +117,7 @@ CREATE TABLE cnt_item (
 **Columns.**
 
 - `item_id`: primary key and foreign key to `cnt_item`. One-to-one with the item.
-- `kind`: `programme`, `album`, `playlist`, `gallery`, `collection` or `project`.
+- `kind`: `programme`, `album`, `playlist`, `gallery`, `collection`, `project` or `category`.
   - `programme`: a class or course. Members are videos.
   - `album`: a music album. Members are tracks.
   - `playlist`: a user-curated list of tracks. Members can be any media. Decided (decision 2, option A): kept, with the owner held on `cnt_item.created_by`. Only rows with a known user become playlists. Anonymous rows go to `eng_` (see section 6.2).
@@ -126,6 +127,8 @@ CREATE TABLE cnt_item (
 - `level_id`: the difficulty level from `dim_level`. Used by programmes; null for the other kinds.
 - `starts_at`, `ends_at`: the webinar window for programmes, or the release window for albums. Null otherwise.
 - `max_participants`: for webinars. Null otherwise.
+- `category_id`: for `kind = category` only. Links the category page to its `dim_category` row. Unique, so each category has one page. Decided (decision 16, option B).
+- `trailer_item_id`: the hero teaser, a `cnt_media` item that must also be a member of this collection with `is_preview = 1`. Null when the programme has no teaser. Decided (decision 10, option C). Reverse lookup: "which collections use this video as their hero?" is a query on this column, which has an index.
 
 **Why the nullable columns are acceptable.** There are four nullable columns, and each applies to one kind. Moving them into attributes would make the most common filters (level, webinar time) slow and awkward. A check constraint in application code enforces which kind may set which column.
 
@@ -136,18 +139,33 @@ CREATE TABLE cnt_item (
 ```sql
 CREATE TABLE cnt_collection (
   item_id          BIGINT UNSIGNED NOT NULL PRIMARY KEY,
-  kind             ENUM('programme','album','playlist','gallery','collection','project') NOT NULL,
+  kind             ENUM('programme','album','playlist','gallery','collection','project','category') NOT NULL,
   parent_id        BIGINT UNSIGNED NULL,
   level_id         SMALLINT UNSIGNED NULL,
   starts_at        DATETIME NULL,
   ends_at          DATETIME NULL,
   max_participants SMALLINT UNSIGNED NULL,
+  category_id      SMALLINT UNSIGNED NULL UNIQUE,   -- kind = category only
   KEY ix_coll_kind (kind),
   CONSTRAINT fk_coll_item   FOREIGN KEY (item_id)   REFERENCES cnt_item(id),
   CONSTRAINT fk_coll_parent FOREIGN KEY (parent_id) REFERENCES cnt_collection(item_id),
-  CONSTRAINT fk_coll_level  FOREIGN KEY (level_id)  REFERENCES dim_level(id)
+  CONSTRAINT fk_coll_level  FOREIGN KEY (level_id)  REFERENCES dim_level(id),
+  CONSTRAINT fk_coll_category FOREIGN KEY (category_id) REFERENCES dim_category(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
+
+The trailer link is added after both tables exist, because `cnt_collection` and `cnt_membership` reference each other:
+
+```sql
+ALTER TABLE cnt_collection
+  ADD COLUMN trailer_item_id BIGINT UNSIGNED NULL,
+  ADD KEY ix_coll_trailer (trailer_item_id),
+  ADD CONSTRAINT fk_coll_trailer
+    FOREIGN KEY (item_id, trailer_item_id)
+    REFERENCES cnt_membership (collection_item_id, item_id);
+```
+
+Notes: MySQL skips the check when `trailer_item_id` is null. Use the default `RESTRICT` on delete, and clear `trailer_item_id` before removing the membership. `ON DELETE SET NULL` would also null `item_id`. Sharing is allowed: one video can be the hero for several programmes (default, pending confirmation).
 
 **Map from legacy.**
 
@@ -180,6 +198,7 @@ CREATE TABLE cnt_collection (
 - `width`, `height`: for photos and video posters.
 - `duration_s`: playing length in seconds. Replaces the free-text `duration` columns.
 - `alt_text`: accessibility text for photos and posters.
+- `track_type_id`: videos only. Points to `dim_track_type` (Explanation, Teach, Performance, Poem in action). Decided (decision 11, option A).
 
 **Why embed code is not stored as raw HTML.** Legacy `tb_freevideo.video_embed_code` holds full iframe markup with HTML entities. Storing only the video id (`external_ref`) and rendering the iframe in the template is safer and lets the player change without a data migration.
 
@@ -201,9 +220,12 @@ CREATE TABLE cnt_media (
   height          SMALLINT UNSIGNED NULL,
   duration_s      INT UNSIGNED NULL,
   alt_text        VARCHAR(255) NULL,
+  track_type_id   SMALLINT UNSIGNED NULL,
   KEY ix_media_type (media_type),
   KEY ix_media_checksum (checksum_sha256),
-  CONSTRAINT fk_media_item FOREIGN KEY (item_id) REFERENCES cnt_item(id)
+  KEY ix_media_track_type (track_type_id),
+  CONSTRAINT fk_media_item FOREIGN KEY (item_id) REFERENCES cnt_item(id),
+  CONSTRAINT fk_media_track_type FOREIGN KEY (track_type_id) REFERENCES dim_track_type(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
@@ -211,14 +233,14 @@ CREATE TABLE cnt_media (
 
 | Legacy | Rows | Target | Notes |
 |---|---|---|---|
-| `tb_video` | 4,388 | `media_type = video` | `cost_type` moves to `cnt_price`. `track_type_id` maps to `dim_track_type` or an attribute (decision in section 4.1) |
+| `tb_video` | 4,388 | `media_type = video` | `cost_type` moves to `cnt_price`. `track_type_id` maps to `cnt_media.track_type_id`, a `dim_track_type` reference (decision 11) |
 | `tb_freevideo` | 125 | `media_type = video` | `free_class_id` becomes a membership in a programme. Its `video_type = 2` (all rows) is a YouTube source |
-| `tb_music_track` | 8,988 | `media_type = track` | `album_id` becomes a membership in an album. `popular_track` becomes an attribute. `trailer` becomes `is_trailer` on membership |
+| `tb_music_track` | 8,988 | `media_type = track` | `album_id` becomes a membership in an album. `popular_track` becomes an attribute. `trailer` becomes `is_preview` on membership |
 | `tb_picture` | 98 | `media_type = photo` | `image_name` and `large_image` become a file reference. Gallery membership goes to `cnt_membership` |
 | `tb_vgallery_videos` | 122 | `media_type = video` | Gallery membership. `v_code` becomes `external_ref` |
 | `tb_product_video` | 7 | `media_type = video` | Product media. Linked to the product item through `cnt_item_media` |
 | `tb_product_image` | 4 | `media_type = photo` | Linked to the product item |
-| `tb_category_cover_images` | 52 | `media_type = photo` | Linked to a category through `cnt_item_media` if categories become items, otherwise kept as a `dim_category` image column |
+| `tb_category_cover_images` | 52 | `media_type = photo` | Decided (decision 16). Only the 9 active rows migrate, linked to the category page through `cnt_item_media` (role `cover`). The 43 inactive rows go in the exclusion report |
 | `tb_music` | 11,671 | `cnt_media` (`media_type = audio`), attached to the video through `cnt_item_media` (role `audio`) | Decided (option A). Rows point at 62 video ids, all of which match `tb_video`. Audio is included with the video's price. `source` is `upload` where a filename is present, otherwise `external`. Share-service URLs are checked in Phase 4, and dead links go to the exclusion report |
 
 ---
@@ -232,7 +254,7 @@ CREATE TABLE cnt_media (
 **Columns.**
 
 - `item_id`: primary key and foreign key to `cnt_item`.
-- `article_type_id`: `dim_article_type`. Replaces the numeric `type_id` in `tb_latest_updates`.
+- `article_type_id`: `dim_article_type`. Replaces the numeric `type_id` in `tb_latest_updates`. Two values at launch: Announcement (legacy 1) and Press (legacy 2). Decided (decision 12, option A).
 - `source_name`, `source_url`: for pieces republished from elsewhere. Replaces `newspaper` and `website_url`.
 - `published_on`: the date shown to readers. Separate from `published_from` on the item, which controls visibility.
 - `read_minutes`: estimated reading time.
@@ -258,7 +280,7 @@ CREATE TABLE cnt_article (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-**Map from legacy.** `tb_latest_updates` (59 rows). `type_id` maps to `article_type_id` once the values are confirmed. `pgm_type` (values `d` or empty) is **Pending**; it may describe the linked programme type and need not carry over. `programme_id` becomes a membership or a related-item link. `file_upload` and `media_file` become media rows. The guru link becomes `cnt_item_contributor`.
+**Map from legacy.** `tb_latest_updates` (59 rows). `type_id` maps to `article_type_id`: 1 becomes `announcement`, 2 becomes `press`. `pgm_type` (values `d` or empty) is **held**: the 59 articles load without it, and the column stays in the archive until its meaning is confirmed. Recommendation taken (decision 12). `programme_id` becomes a membership or a related-item link. `file_upload` and `media_file` become media rows. The guru link becomes `cnt_item_contributor`.
 
 ---
 
@@ -270,32 +292,32 @@ CREATE TABLE cnt_article (
 
 **Columns.**
 
-- `collection_id`: the grouping.
+- `collection_item_id`: the grouping. It holds a `cnt_collection.item_id`, which is a `cnt_item.id`, so it's in the same id space as every other item. Decided (key naming, option A): renamed from `collection_id`, which suggested a separate id. The legacy `collection_id` on `tb_programme` is unchanged, since it's a legacy name.
 - `item_id`: the member. Can be any `cnt_item`.
-- `is_trailer`: marks a preview item of a programme or album. **Pending decision 10.** The legacy data has several flagged items per programme, so the "one trailer" rule is not applied until the meaning is settled.
+- `is_preview`: marks a free sample lesson in a programme or album. Decided (decision 10, option C). The hero teaser is not marked here. It's `cnt_collection.trailer_item_id`.
 - `display_order`: position within the collection.
 
-**Why the primary key is `(collection_id, item_id)`.** An item appears in a collection once. If the same video is used twice in one programme, that's a data error, not a design case.
+**Why the primary key is `(collection_item_id, item_id)`.** An item appears in a collection once. If the same video is used twice in one programme, that's a data error, not a design case.
 
 **DDL.**
 
 ```sql
 CREATE TABLE cnt_membership (
-  collection_id BIGINT UNSIGNED NOT NULL,
+  collection_item_id BIGINT UNSIGNED NOT NULL,
   item_id       BIGINT UNSIGNED NOT NULL,
-  is_trailer    TINYINT(1) NOT NULL DEFAULT 0,
+  is_preview    TINYINT(1) NOT NULL DEFAULT 0,   -- sample lesson; the hero teaser is cnt_collection.trailer_item_id
   display_order SMALLINT UNSIGNED NOT NULL DEFAULT 0,
-  PRIMARY KEY (collection_id, item_id),
+  PRIMARY KEY (collection_item_id, item_id),
   KEY ix_member_item (item_id),
-  CONSTRAINT fk_mem_coll FOREIGN KEY (collection_id) REFERENCES cnt_collection(item_id),
+  CONSTRAINT fk_mem_coll FOREIGN KEY (collection_item_id) REFERENCES cnt_collection(item_id),
   CONSTRAINT fk_mem_item FOREIGN KEY (item_id) REFERENCES cnt_item(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 **Map from legacy.**
 
-- `tb_programme_video` (4,384 rows): `programme_id` becomes `collection_id`, `video_id` becomes `item_id`, `is_trailor` becomes `is_trailer`, and `display_order` carries over. The legacy table has 2 rows with a `programme_id` that doesn't resolve to `tb_programme`. Those need a decision before loading.
-- `tb_music_track` (8,988): `album_id` becomes `collection_id`.
+- `tb_programme_video` (4,384 rows): `programme_id` becomes `collection_item_id`, `video_id` becomes `item_id`, `is_trailor` becomes `is_preview`, and `display_order` carries over. Decision 10: the 350 flags are sample lessons. The legacy table has 2 rows with a `programme_id` that doesn't resolve to `tb_programme`. Those need a decision before loading.
+- `tb_music_track` (8,988): `album_id` becomes `collection_item_id`.
 - `tb_vgallery_videos` and `tb_picture`: gallery members.
 - `tb_freevideo`: `free_class_id` becomes the programme.
 
@@ -337,14 +359,14 @@ Image files need a copy into object storage and a checksum during migration. Fil
 
 ### 3.7 `cnt_item_contributor`
 
-**Why it exists.** A programme has a primary guru and may have co-teachers. An album has artists and a producer. A track has artists. Legacy keeps these as separate link tables with slightly different columns (`tb_programme_artist`, `tb_music_album_artist`, `tb_music_artist_category`). One table with a role covers all of them, and the contributor record lives in the Gurus group.
+**Why it exists.** A programme has a primary guru and may have co-teachers. An album has artists and a producer. A track has artists. Legacy keeps these as separate link tables with slightly different columns (`tb_programme_artist`, `tb_music_album_artist`, `tb_music_artist_category`). One table with a role covers all of them. The contributor record lives in the usr domain, in `usr_contributors` (decision 20, option A).
 
 **What a row is.** One contributor credited on one item, in one role.
 
 **Columns.**
 
 - `item_id`: the item.
-- `contributor_id`: the guru, artist or producer record. Points to the contributor registry in the Gurus group, pending that group's design.
+- `contributor_id`: the guru, artist or producer record in `usr_contributors`. Decided (decision 20, option A). Content holds only the id. Identity and login links are owned by usr (see `auth-rbac.md` and ADR-007).
 - `role_id`: `dim_contributor_role`. Replaces an enum so admins can add roles without a migration. Values at launch: primary, co-teacher, artist, producer, credit.
 - `display_order`: credit order on the page.
 
@@ -371,7 +393,7 @@ CREATE TABLE cnt_item_contributor (
 - `tb_programme_artist` (3,161 rows): `guru_id` becomes a `co_teacher` row.
 - `tb_music_album_artist` (425 rows): each becomes an `artist` row.
 - `tb_video.guru_id` becomes a `primary` row on the video.
-- `tb_other_artist` (6 rows): artists without a login. Migrated as contributor records in the Gurus group, then linked here.
+- `tb_other_artist` (6 rows): artists without a login. Migrated as `usr_contributors` rows with no login link, then referenced here.
 - `tb_freeclass.guru_text` is free text, not a guru id. It needs matching or manual review. Do not guess.
 
 ---
@@ -387,7 +409,10 @@ CREATE TABLE cnt_item_contributor (
 - `item_id`: the item.
 - `section_type_id`: `dim_section_type`. Values at launch: `what_you_learn`, `requirements`, `includes`, `description`, `extra`.
 - `title`: optional heading.
-- `body`: the text, as Markdown or sanitised HTML. Decision pending on the format (section 12).
+- `html_text`: the canonical text, sanitised HTML. The legacy editor wrote HTML, so this keeps the text as written.
+- `markdown_text`: a Markdown copy derived from `html_text`, for other channels and for editors who prefer Markdown. Regenerated on every write. Never edited directly.
+
+Decided (decision 13, option B, with both columns). Sanitising applies on write, before `html_text` is stored, and again on output. The allow-list covers the tags the legacy content uses. Anything outside it is removed.
 - `display_order`: order within the item.
 
 **Why a unique key on `(item_id, section_type_id, display_order)`.** Prevents two rows with the same position in the same section, which would render unpredictably.
@@ -400,7 +425,8 @@ CREATE TABLE cnt_content_section (
   item_id         BIGINT UNSIGNED NOT NULL,
   section_type_id SMALLINT UNSIGNED NOT NULL,
   title           VARCHAR(255) NULL,
-  body            MEDIUMTEXT NOT NULL,
+  html_text       MEDIUMTEXT NOT NULL,            -- canonical, sanitised on write and on output
+  markdown_text   MEDIUMTEXT NULL,                -- derived from html_text, regenerated on write
   display_order   SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   UNIQUE KEY uq_section_position (item_id, section_type_id, display_order),
   CONSTRAINT fk_section_item FOREIGN KEY (item_id) REFERENCES cnt_item(id),
@@ -410,11 +436,14 @@ CREATE TABLE cnt_content_section (
 
 **Map from legacy.**
 
-- `tb_programme.what_you_learn`, `requirements`, `course_includes`, `description`, `sub_head_1`, `sub_head_2`, `sub_head`: become sections. The short fields may stay on `cnt_item.short_description` if they're short; decision in section 12.
+- `tb_programme.what_you_learn`, `requirements`, `course_includes`, `description`: become sections.
+- `sub_head_1` and `sub_head_2` move to `cnt_item_subtitle` (section 3.15).
+- `sub_head` becomes a theme: `dim_category` with `domain = theme`, linked through `cnt_item_category` (decision 14, option B). `short_description` stays on `cnt_item`.
 - `tb_programme_description` (349 rows): `item_type = 1` means programme. Each row becomes an `extra` section on that programme.
 - `tb_product_description` (3 rows): sections on products.
 - `tb_video.includes`, `what_you_learn`, `requirements`, `description`: sections on videos.
-- `tb_latest_updates.description`: the article body.
+- `tb_latest_updates.description`: the article body, stored in `html_text`.
+- Migration: each long-text field is sanitised into `html_text`, and `markdown_text` is generated from that. The migration report lists every row where sanitising removed or changed something, so the content team can check it.
 
 ---
 
@@ -475,7 +504,7 @@ CREATE TABLE cnt_item_tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-**Migration.** Split each `tags` value on commas, trim, lowercase, create tags as needed, and link. The `meta_keywords` columns are a separate question: search engines have ignored them for years. **Pending:** keep them as text on `cnt_item`, or drop them.
+**Migration.** Split each `tags` value on commas, trim, lowercase, create tags as needed, and link. Meta keywords are dropped (decision 15, option A). Search engines have ignored them for years, and the tag model covers discovery. Before the columns are dropped, the content team checks a sample of keyword lists.
 
 ---
 
@@ -523,7 +552,7 @@ CREATE TABLE cnt_attribute (
 - `tb_music_album.album_type` (`f`/`p`): key `album_type`, string.
 - `tb_music_album.individual_purchase`, `subscription`: booleans.
 - `tb_vgallery.event_id` (number), `from_date` and `to_date` (dates).
-- `tb_video.track_type_id`: see section 4.1.
+- `tb_video.track_type_id`: `cnt_media.track_type_id`, a `dim_track_type` reference. Decided (decision 11, option A).
 - `tb_video.accessibility_type`: string.
 
 ---
@@ -537,7 +566,7 @@ CREATE TABLE cnt_attribute (
 **Columns.**
 
 - `item_id`: the item being sold. Any `cnt_item` can be priced, including products.
-- `access_model`: `free`, `purchase` (one-time) or `subscription`. Replaces `cost_type`. `free` rows have a zero price, so the model is always explicit.
+- `access_model`: `free`, `purchase` or `subscription`. Replaces `cost_type`. `free` rows have a zero price, so the model is always explicit. Legacy codes `2` and `3` both become `purchase`. They differ in validity, not in access model (see the mapping below).
 - `price_inr`, `price_usd`: rupees and dollars on the row, as the brief requires.
 - `price_eur`: kept but unused. Decided (decision 8, option B). No legacy row sets a euro value (0 of 364), so the column is empty at launch. It's there so euro can be added without a schema change. The rule is that the column is never set by the application until euro is a supported currency.
 - `validity_value`, `validity_unit`: how long the access lasts. For example 12 months, or lifetime. Replaces `valid_days` and `valid_type`.
@@ -555,6 +584,7 @@ CREATE TABLE cnt_price (
   id                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   item_id           BIGINT UNSIGNED NOT NULL,
   access_model      ENUM('free','purchase','subscription') NOT NULL,
+  price_kind        ENUM('fresh','renewal') NOT NULL DEFAULT 'fresh',   -- renewal applies to existing purchasers only
   price_inr         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   price_usd         DECIMAL(10,2) NULL,
   price_eur         DECIMAL(10,2) NULL,          -- unused at launch; see decision 8
@@ -576,17 +606,37 @@ CREATE TABLE cnt_price (
 
 | Legacy | Rows | Target | Notes |
 |---|---|---|---|
-| `tb_cost_package` | 364 | `cnt_price` | `item_type = 1` is video, verified: all 173 distinct item ids match `tb_video`. Prices (INR and USD) migrate for all rows. The `r` (189) and `f` (175) codes are **held**: the validity and renewal interpretation waits for confirmation. See decision 9 |
+| `tb_cost_package` | 364 | `cnt_price` | `item_type = 1` is video, verified: all 173 distinct item ids match `tb_video`. Prices (INR and USD) migrate for all rows. The `f` (175) codes map to fresh purchase prices, and the `r` (189) codes map to renewal prices (decision 9, corrected). The `valid_type` codes still need a mapping. See decision 9 |
 | `tb_music_package` | 33 | `cnt_price` | `type = 'i'` (individual) on all rows. `duration_type` maps to `validity_unit` |
 | `tb_product_cost` | 4 | `cnt_price` | Product prices |
-| `tb_programme.cost_type` | 184 | `cnt_price.access_model` | `1` → `free` (3 rows), `2` → `purchase` (169 rows). `0` → **held** (12 rows) |
+| `tb_programme.cost_type` | 184 | `cnt_price.access_model` | `1` → `free` (3 rows). `2` → `purchase` (169 rows). `0` → no price row (12 rows, deprecated or private) |
 | `tb_video.cost_type` | 4,388 | `cnt_price.access_model` | `1` → `free` (469), `2` → `purchase` (3,919) |
-| `tb_music.cost_type` | 11,671 | Audio inherits the video's price, so no separate `cnt_price` rows | `2` (11,655) → mapped, but only matters if audio is sold separately. `3` (5) and `0` (11) are **held** |
+| `tb_music.cost_type` | 11,671 | `2` (paid) is the audio attached to a video, which inherits the video's price. `3` (one-time) and `0` (deprecated) are the separate MP3 downloads | `2` (11,655) → `purchase`, inherited from the video. `3` (5) → `purchase` with lifetime validity. `0` (11) → no price row. All 16 `0` and `3` rows are deleted (status 2), so they archive and don't go on sale |
 
-Decided (decision 9, option B). Codes with a clear meaning are mapped: `1` is free and `2` is purchase, for each table. Rows with an unclear code are held in a list and loaded after the business owners confirm the meaning. The held rows are:
-- `tb_programme` `cost_type` `0`: 12 rows.
-- `tb_music` `cost_type` `0` and `3`: 16 rows.
-- `tb_cost_package` `cost_type` `r` and `f`: the validity and renewal fields only. The price amounts are not held (see decision 9).
+Decided (decision 9), with the business mapping:
+- `1` = free. `access_model = free`, price 0.
+- `2` = paid. `access_model = purchase`. Validity comes from the package row.
+- `3` = one-time purchase. `access_model = purchase`, `validity_unit = lifetime`.
+- `0` = private or deprecated. No `cnt_price` row. The item's status follows the mapping in 6.9.
+
+Package codes in `tb_cost_package` (decision 9, corrected by the business):
+- `f` = fresh purchase. `access_model = purchase`, `price_kind = fresh`. The price a new customer pays.
+- `r` = renewal. `access_model = purchase`, `price_kind = renewal`. The price an existing customer pays when their access runs out. Not a subscription, and not an alternative to `f`.
+- Renewal reminders come from `renew_before`.
+- Price amounts migrate for all 364 rows under either code.
+
+An item has one fresh price and, where offered, one renewal price per validity period. A renewal price only applies to customers who already hold a purchase of the same item, and whose access has run out. Decided (option A). The rule needs an entitlements record, owned by the transaction domain (ADR-008).
+
+Validity mapping, from `tb_cost_package.valid_type` (decision 9, business mapping):
+- `0` and `1` = days. `validity_unit = days`.
+- `2` = months. `validity_unit = months`.
+- `3` = years. `validity_unit = years`.
+- NULL (3 rows) = unknown. Held until checked.
+
+`valid_days` becomes `validity_value`. Three data checks come before load:
+- 9 rows with `valid_type = 0` have `valid_days = 0`. "Two days" is in the title, so the count is probably missing. These need a value.
+- 34 rows with `valid_type = 3` have `valid_days = 30`. As years, that's 30 years, which is almost certainly a day count entered in the wrong field. These need checking.
+- 163 `f` rows carry a renewal window. Those are kept as purchases with a reminder, and are checked before load.
 
 Prices for the paid rows need a rupee and dollar value. Where a dollar value is missing, the migration report lists the row and the item, and does not invent a figure.
 
@@ -667,6 +717,40 @@ CREATE TABLE log_content_changes (
 
 **Map from legacy.** None. This is new. Migration starts the history at go-live. Earlier changes are not reconstructed from the `last_updated_*` columns, because those columns don't hold the before values.
 
+### 3.15 `cnt_item_subtitle`
+
+**Why it exists.** Subheads are an ordered list of short lines, and the number per item is not fixed. "Add more" in the legacy editor created them. Storing them as sections would force sanitised HTML onto plain text. Storing them as attributes would lose their order. The card layout shows one subtitle, so the order matters.
+
+**What a row is.** One subtitle line on one item, at one position.
+
+**Columns.**
+
+- `item_id`: the item.
+- `position`: 1-based order. The card shows position 1 by default. The composer can choose another position.
+- `text`: plain text, up to 255 characters, with no markup. Sanitising is not needed.
+
+**Keys.** Primary key `id`. Natural key `(item_id, position)`, unique, so two lines can't share a position.
+
+**DDL.**
+
+```sql
+CREATE TABLE cnt_item_subtitle (
+  id        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  item_id   BIGINT UNSIGNED NOT NULL,
+  position  SMALLINT UNSIGNED NOT NULL,
+  text      VARCHAR(255) NOT NULL,
+  UNIQUE KEY uq_subtitle_position (item_id, position),
+  CONSTRAINT fk_subtitle_item FOREIGN KEY (item_id) REFERENCES cnt_item(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+**Map from legacy.**
+
+- `tb_programme.sub_head_1` (73 rows, up to 28 characters) becomes position 1.
+- `tb_programme.sub_head_2` (73 rows, up to 14 characters) becomes position 2.
+- Placeholder values such as "s h 1" and "s h 2" are checked by the content team before load.
+- `tb_programme.sub_head` (22 rows, seven themes: Health, Heritage, Instrumental, Miyawaki Afforestation, Vocal, Magic, Travel) is not a subtitle. It maps to `dim_category` with `domain = theme`, linked through `cnt_item_category` (decision 14, option B).
+
 ---
 
 ## 4. Dimensions
@@ -694,13 +778,13 @@ Deactivate rather than delete. `is_active = 0` hides a value from new choices bu
 
 ### 4.1 Content-owned dimensions
 
-**`dim_category`** (PDF). Dance forms, music genres and product categories in one table. Adds `domain` (`dance`, `music` or `product`) and `parent_id` for hierarchy.
+**`dim_category`** (PDF). Dance forms, music genres, product categories and programme themes in one table. Adds `domain` (`dance`, `music`, `product` or `theme`) and `parent_id` for hierarchy.
 
 ```sql
 CREATE TABLE dim_category (
   id           SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   code         VARCHAR(60) NOT NULL,
-  domain       ENUM('dance','music','product') NOT NULL,
+  domain       ENUM('dance','music','product','theme') NOT NULL,
   parent_id    SMALLINT UNSIGNED NULL,
   label        VARCHAR(120) NOT NULL,
   description  VARCHAR(500) NULL,
@@ -713,7 +797,7 @@ CREATE TABLE dim_category (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-Why one table: the PDF already decided this, and it replaces three legacy hierarchies (`tb_category` 20 rows, `tb_music_category` 17, `tb_product_category` 2). Legacy `tb_category` also carries `mudra_image` and `mudra_text`, which are content and move to `cnt_item_media` and `cnt_content_section` for the category page, if categories become browsable items. Decision in section 12.
+Why one table: the PDF already decided this, and it replaces three legacy hierarchies (`tb_category` 20 rows, `tb_music_category` 17, `tb_product_category` 2). Legacy `tb_category` also carries presentation content: `mudra_image`, `mudra_text1`, `mudra_text2`, `quotes`, `banner_description` and `detailed_page_image`. Decided (decision 16, option B): this content moves to a `cnt_collection` row with `kind = category`, linked by `category_id`. Mudra text and quotes go in `cnt_content_section`. Images go in `cnt_item_media`. `dim_category` stays a clean taxonomy.
 
 **`dim_level`** (proposed; the PDF says "levels" are in the reference domain without naming the table). Beginner, intermediate and so on, with `parent_id` for sub-levels.
 
@@ -752,7 +836,7 @@ CREATE TABLE dim_language (
 
 Why BCP 47 codes: they're the standard for language tags, and they're what browsers and search engines expect. Legacy `tb_language` (12 rows) has only a name and status, so codes are assigned during migration. Current `tb_programme.language_id` values map to these rows. Free-text language fields in `tb_video` and `tb_freeclass` are not used by this table and are migrated only where they match a known language.
 
-**`dim_track_type`** (proposed). Video track types from `tb_video_track_type` (4 rows).
+**`dim_track_type`** (decided, decision 11, option A). Video track types from `tb_video_track_type` (4 rows): Explanation, Teach, Performance, Poem in action.
 
 ```sql
 CREATE TABLE dim_track_type (
@@ -767,9 +851,9 @@ CREATE TABLE dim_track_type (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-**Decision pending.** `tb_video.track_type_id` is NULL on 3,775 of 4,388 videos, and `tb_cost_package.video_track_type_id` also references it. If the table is only four values, a `cnt_attribute` key (`track_type`, string) may be simpler. If it's used in pricing (through `cnt_price`), keep the table.
+**Decided.** Kept as a table, so admins can extend the types. 3,775 videos have no value (NULL), and 380 have `0`. Both map to NULL. Pricing does not use track type: no cost package sets a real value, so there's no link to `cnt_price`. `tb_cost_package.video_track_type_id` is not migrated.
 
-**`dim_article_type`** (proposed). News and other article kinds, from the values of `tb_latest_updates.type_id` (1 and 2 in the dump). The meaning of those values has to be confirmed before the table can be seeded.
+**`dim_article_type`** (decided, decision 12, option A). Two values, from `tb_latest_updates.type_id`: `announcement` (legacy 1, 37 rows, internal items, no source name) and `press` (legacy 2, 22 rows, every one with a source name). The labels are my reading of the data. The content team confirms them before seeding.
 
 ```sql
 CREATE TABLE dim_article_type (
@@ -835,7 +919,7 @@ These are not tables, because the code branches on them and they don't change wi
 | Enum | Values | Where |
 |---|---|---|
 | `cnt_item.kind` | collection, media, article, product | `cnt_item` |
-| `cnt_collection.kind` | programme, album, playlist, gallery, collection, project | `cnt_collection` |
+| `cnt_collection.kind` | programme, album, playlist, gallery, collection, project, category | `cnt_collection` |
 | `cnt_media.source` | upload, youtube, vimeo, embed, external | `cnt_media` |
 | `cnt_item_media.role` | cover, thumbnail, share, banner, home, profile, audio | `cnt_item_media` |
 | `cnt_media.media_type` | video, track, photo, document, audio | `cnt_media` |
@@ -898,14 +982,15 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 | `tb_programme_video` | 4,384 | `cnt_membership` | Migrate. Resolve 2 orphan `programme_id` values first |
 | `tb_video` | 4,388 | `cnt_item` (kind media) + `cnt_media` (type video) | Migrate. `cost_type` goes to `cnt_price`. Drop rating and view counters |
 | `tb_freevideo` | 125 | `cnt_item` + `cnt_media` (type video) + `cnt_membership` into the free programme | Migrate. All rows are YouTube embeds |
-| `tb_freeclass` | 23 | `cnt_item` (kind collection) + `cnt_collection` (kind programme, free) | Migrate after removing test rows. `guru_text` and `category_text` need matching, not copying |
+| `tb_freeclass` | 23 | `cnt_item` (kind collection) + `cnt_collection` (kind programme, free) | Decided (decision 19, option A). Exclude "test title" (row 1), listed in the exclusion report. The other deleted rows (status 2) migrate as archived, per 6.9. `guru_text` and `category_text` need matching, not copying ("Invis" appears on five rows) |
 | `tb_collection` | 1 | `cnt_item` (kind collection) + `cnt_collection` (kind collection) | Decided (decision 3, option A). The 73 programme links come from `tb_programme.collection_id` through `cnt_membership` |
 | `tb_level` | 11 | `dim_level` | Migrate |
 | `tb_level_sub` | 4 | `dim_level` with `parent_id` | Migrate |
-| `tb_category` | 20 | `dim_category` (domain dance) | Migrate. Image columns decision in section 12 |
-| `tb_category_cover_images` | 52 | `cnt_item_media` if categories are items, else category image column | Migrate. **Pending** the category decision |
+| `tb_category` | 20 | `dim_category` (domain dance) | Migrate. Presentation fields move to the category page (decision 16) |
+| `tb_category_cover_images` | 52 | `cnt_item_media` (role `cover`) on the category page | Decided (decision 16). 9 active rows migrate. 43 inactive rows go in the exclusion report |
+| `tb_category` | 20 | `dim_category` (taxonomy) + `cnt_item` (kind collection) + `cnt_collection` (kind category) + `cnt_content_section` and `cnt_item_media` | Decided (decision 16, option B). Presentation fields move to the category page. Only 7 of 20 have most of them |
 | `tb_language` | 12 | `dim_language` | Migrate. Assign codes |
-| `tb_video_track_type` | 4 | `dim_track_type` or attribute | **Pending** |
+| `tb_video_track_type` | 4 | `dim_track_type` | Decided (decision 11) |
 | `tb_guru_art_forms` | 39 | `usr` group (guru to category link) | Not content. Covered in the usr design |
 
 ### 6.2 Music
@@ -913,10 +998,10 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 | Legacy table | Rows | Target | Action |
 |---|---|---|---|
 | `tb_music_album` | 43 | `cnt_item` (kind collection) + `cnt_collection` (kind album) | Migrate |
-| `tb_music_track` | 8,988 | `cnt_item` (kind media) + `cnt_media` (type track) + `cnt_membership` into the album | Migrate. Verify the album link: about 200 tracks per album is unusual |
+| `tb_music_track` | 8,988 | `cnt_item` (kind media) + `cnt_media` (type track) + `cnt_membership` into the album | Migrate. Status per section 6.9: 504 public tracks load as published. 8,484 deleted tracks load as archived, with `deleted_at` set, and are not published. Verify the album link: about 200 tracks per album is unusual |
 | `tb_music_album_artist` | 425 | `cnt_item_contributor` (role `artist`) | Migrate |
 | `tb_music_album_category` | 783 | `cnt_item_category` | Migrate. Ratio is high; verify |
-| `tb_music_artist` | 24 | `usr` group (contributor records) | Migrate the contributor part. Images go to `cnt_item_media` |
+| `tb_music_artist` | 24 | `usr_contributors` (type artist) | Migrate the contributor part. Images go to `cnt_item_media` |
 | `tb_music_artist_category` | 54 | `usr` group (artist to category) | Not content. Covered in the usr design |
 | `tb_music_category` | 17 | `dim_category` (domain music) | Migrate |
 | `tb_music_package` | 33 | `cnt_price` | Migrate |
@@ -924,7 +1009,7 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 | `tb_music_list`, rows with no `user_id` | 2,586 | `eng_events` (activity) | Decided. No owner, so they can't be a playlist. Keep for analysis, not for display. Recorded as `event_type = legacy_music_list` with `session_id` and `added_on`. IP is dropped, per the privacy rule in `auth-rbac.md` |
 | `tb_music_playlist_master` | 0 | Not migrated | Empty. The legacy master table has no rows, so no playlist records exist there |
 | `tb_music` | 11,671 | `cnt_media` (audio) + `cnt_item_media` (role `audio`) | Decided (option A). Dead-link check in Phase 4. See section 12, decision 1 |
-| `tb_other_artist` | 6 | `usr` group (contributor records) | Migrate |
+| `tb_other_artist` | 6 | `usr_contributors` (type artist, no login) | Migrate |
 
 ### 6.3 Products
 
@@ -951,7 +1036,7 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 
 | Legacy table | Rows | Target | Action |
 |---|---|---|---|
-| `tb_latest_updates` | 59 | `cnt_item` (kind article) + `cnt_article` + `cnt_content_section` | Migrate. `type_id` mapping **Pending**. `pgm_type` **Pending** |
+| `tb_latest_updates` | 59 | `cnt_item` (kind article) + `cnt_article` + `cnt_content_section` | Migrate. `type_id` mapped (decision 12). `pgm_type` **held** until its meaning is confirmed |
 | `tb_pages` | 37 | `cnt_item` (kind article) + `cnt_article` (with `parent_item_id`) + `cnt_content_section` + `cnt_membership` | Decided (decision 6, option A). See section 6.7 |
 | `tb_whatsnew_home` | 86 | Retired | Hand-picked homepage list. Replaced by composer slots. Export for reference, then drop |
 
@@ -959,7 +1044,7 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 
 | Legacy table | Rows | Target | Action |
 |---|---|---|---|
-| `tb_cost_package` | 364 | `cnt_price` | Migrate rupees and dollars for all rows. Euro is unused (0 rows set it). The `r` and `f` codes are held for the validity and renewal fields only (decision 9) |
+| `tb_cost_package` | 364 | `cnt_price` | Status `1` active, `0` inactive, `3` deleted and archived (32 rows, not loaded). Migrate rupees and dollars for the rest. Euro is unused (0 rows set it). `r` and `f` map as in 3.12. `valid_type` 0 and 1 are days, 2 months, 3 years. 3 NULL rows held. 34 rows with 30 years and 9 rows with 0 days need checks before load |
 | `tb_music_package` | 33 | `cnt_price` | Migrate |
 | `tb_product_cost` | 4 | `cnt_price` | Migrate |
 
@@ -981,9 +1066,38 @@ The full list. Counts are from the dump. Rows marked **Pending** are covered in 
 
 - Rating and counter columns: `rate_1`–`rate_5`, `int_rate_1`–`int_rate_5`, `average_rating`, `initial_view_count`, `actual_view_count`. Rebuilt in `cnt_item_stats`.
 - Denormalised names: `dp_level_name`, `guru_text`, `category_text` (after matching), `newspaper` (moved to `source_name`).
-- Free-text duplicates of relations: `tags` (moved to `cnt_tag`).
+- Free-text duplicates of relations: `tags` (moved to `cnt_tag`), and `meta_keywords` (dropped, decision 15).
 - Repeated audit columns: `added_on`, `added_by`, `added_ip`, `last_updated_*`, `deleted_*`. Replaced by the standard audit base on `cnt_item`, and by `log_content_changes`. IP columns are dropped, in line with the privacy rule in `auth-rbac.md`.
 - Typo and spelling variants: `trailor_video_embed_code`, `int_rat_1`, `seperate_page`, `dimention_in`, `webinar_dispaly_upto`. Their meaning is carried over under the correct names.
+
+
+### 6.9 Status mapping (decision 17)
+
+Legacy status codes mean the same thing in every table. Decided: `0` is private, `1` is public and `2` is deleted.
+
+| Legacy code | Meaning | `cnt_item.status` | `cnt_item.visibility` | `cnt_item.deleted_at` |
+|---|---|---|---|---|
+| `0` | Private | `draft` | `hidden` | NULL |
+| `1` | Public | `published` | `public` | NULL |
+| `2` | Deleted | `archived` | `hidden` | Legacy deletion date. If the date is missing or `0000-00-00`, use the migration time |
+
+Rules:
+- Deleted rows migrate as archived, not dropped. They're kept for recovery and for the migration report.
+- Only public rows become visible. Private and deleted rows never appear on the site, even after migration.
+- Test rows with code `2` (for example "Test" and "asdf") are listed in the exclusion report, not loaded.
+- Confirmed on recommendation: "private" maps to `draft` with `hidden` visibility. If it turns out to mean members-only, the mapping changes to `visibility = members`.
+
+Package status in `tb_cost_package` (decision 17, applied to packages, option A):
+- `1` = public. `cnt_price` row is active and sold.
+- `0` = private. `cnt_price` row is kept, inactive, not sold.
+- `3` = deleted. Archived, not loaded. These are 32 packages, 31 of which sit on public videos. Some duplicate live prices, which is the intended result.
+
+Examples from the dump, using the mapping:
+- `tb_music_track` status `1` (504 rows, placeholder deletion date): published, public.
+- `tb_music_track` status `2` (8,484 rows, real deletion dates): archived, deleted.
+- `tb_video` status `0` (199 rows): draft, hidden.
+- `tb_video` status `1` (4,185 rows): published, public.
+- `tb_video` status `2` (4 rows, test titles): archived, excluded from load.
 
 ---
 
@@ -998,7 +1112,7 @@ The plan runs in phases. Each phase has an exit check, and a phase does not star
 **Phase 2. Load the dimensions.** Migrate `tb_language`, `tb_level`, `tb_level_sub`, `tb_category`, `tb_music_category`, `tb_product_category`, `tb_video_track_type`. Assign codes and record `legacy_table` and `legacy_id` on each.
 *Exit check:* row count in each dim matches the legacy count, and every legacy id maps to exactly one code.
 
-**Phase 3. Load collections.** `tb_programme`, `tb_freeclass` (after test rows are removed), `tb_music_album`, `tb_pgallery`, `tb_vgallery`, and `tb_collection` if confirmed. Create one `cnt_item` row per legacy row, then the detail row.
+**Phase 3. Load collections.** Category pages from `tb_category` (kind category), `tb_programme`, `tb_freeclass` (without "test title"), `tb_music_album`, `tb_pgallery`, `tb_vgallery`, and `tb_collection` if confirmed. Create one `cnt_item` row per legacy row, then the detail row.
 *Exit check:* counts match the legacy table minus the excluded rows, which are listed in a written exclusion report.
 
 **Phase 4. Load media.** `tb_video`, `tb_freevideo`, `tb_music_track`, `tb_picture`, `tb_vgallery_videos`, `tb_product_video`, `tb_product_image`. Copy image and file assets into object storage. Compute checksums. Deduplicate by checksum and record the mapping.
@@ -1007,10 +1121,10 @@ The plan runs in phases. Each phase has an exit check, and a phase does not star
 **Phase 5. Load links.** `cnt_membership` from `tb_programme_video`, `tb_music_track`, and gallery members. Then `cnt_item_contributor`, `cnt_item_category`, `cnt_item_media`.
 *Exit check:* no orphan links. The 2 orphan `programme_id` values in `tb_programme_video` are resolved or reported.
 
-**Phase 6. Load text and tags.** `cnt_content_section` from the description and long-text columns. `cnt_tag` and `cnt_item_tag` from the `tags` columns.
+**Phase 6. Load text, subtitles and tags.** `cnt_content_section` from the description and long-text columns. `cnt_item_subtitle` from `sub_head_1` and `sub_head_2`. `dim_category` themes from `sub_head`, linked through `cnt_item_category`. Each value is sanitised into `html_text`, and `markdown_text` is generated. `cnt_tag` and `cnt_item_tag` from the `tags` columns.
 *Exit check:* spot-check 20 programmes against the legacy pages, field by field.
 
-**Phase 7. Load prices.** `cnt_price` from `tb_cost_package`, `tb_music_package` and `tb_product_cost`, and from the `cost_type` columns. Clear codes load now. Held rows (decision 9) load in a second pass once confirmed. Rows with no dollar value are listed in the report.
+**Phase 7. Load prices.** `cnt_price` from `tb_cost_package`, `tb_music_package` and `tb_product_cost`, and from the `cost_type` columns. Codes map as in 3.12. The `valid_type` mapping is applied as in 3.12. The 34 and 9 suspect rows are checked before they load. Rows with no dollar value are listed in the report.
 *Exit check:* every paid item has a current price row (`is_active = 1`). Every free item has a `free` row.
 
 **Phase 8. Load articles and attributes.** `cnt_article` from `tb_latest_updates`. `cnt_attribute` for the keys in section 3.11.
@@ -1030,13 +1144,15 @@ These are the counts the migration must reproduce, from the dump:
 | Legacy | Expected target count | Notes |
 |---|---|---|
 | `tb_programme` | 184 `cnt_collection` (programme) | |
-| `tb_freeclass` | 23 minus test rows | Count of test rows to be confirmed in the exclusion report |
+| `tb_freeclass` | 22 (23 minus "test title") | 19 published or draft, 3 archived as deleted real classes; "test title" excluded |
 | `tb_video` | 4,388 `cnt_media` (video) | |
 | `tb_freevideo` | 125 `cnt_media` (video) | |
 | `tb_music` | 11,671 `cnt_media` (audio), before dead-link check | Count may fall after the dead-link check. Removed rows go in the exclusion report |
 | `tb_music_list` (user rows) | 591 `cnt_membership` across 47 playlists | Rows with a user only |
 | `tb_music_list` (anonymous rows) | 2,586 `eng_events` | No owner, so activity only |
 | `tb_programme.collection_id` (non-zero) | 73 `cnt_membership` rows into the Gita Govinda collection | Programmes with `0` or `NULL` get no membership |
+| `tb_programme` `sub_head_1` and `sub_head_2` | 73 + 73 `cnt_item_subtitle` rows | Placeholder values reviewed before load |
+| `tb_programme` `sub_head` | 22 `cnt_item_category` links to 7 `dim_category` themes | Decided (decision 14, option B) |
 | `tb_project` | 2 `cnt_collection` (kind project) | "Test Project" excluded and listed in the exclusion report |
 | `tb_pages` | 37 `cnt_article` | 36 in the Gita Govinda collection through `cnt_membership`. Parent links are checked against the tree |
 | `tb_class_music_payment` | 8 `rev_` payment rows, each referencing a project | Counts checked against the revenue design |
@@ -1061,7 +1177,7 @@ Any difference from these numbers must appear in the exclusion report with a rea
 Some rules can't be expressed in MySQL 8 without triggers, and triggers are harder to test. These are enforced in the application layer, with a nightly check that reports violations:
 
 - A `cnt_collection` row's `kind` decides which nullable columns may be set (`level_id` only for programmes, `starts_at` and `ends_at` only for programmes and albums).
-- Trailer rule: pending decision 10. Do not enforce "one trailer per collection" until it's decided.
+- Trailer link: `cnt_collection.trailer_item_id` must be a member of that collection with `is_preview = 1`. The database enforces the membership part through a composite foreign key. The application sets `is_preview`.
 - At most one `is_primary = 1` row per item in `cnt_item_category`.
 - At most one active (`is_active = 1`) price per item and currency window.
 - `cnt_attribute` values must match the key's `value_type` in `dim_attribute_key`.
@@ -1102,7 +1218,7 @@ Card fields (title, short description, cover image, primary contributor, level, 
 | `dim_category` | Dimension | Content | `cnt_item_category` |
 | `dim_level` | Dimension | Content | `cnt_collection` |
 | `dim_language` | Dimension | Content (shared with usr) | `cnt_item` |
-| `dim_track_type` | Dimension, **Pending** | Content | `cnt_media` (optional) |
+| `dim_track_type` | Dimension | Content | `cnt_media.track_type_id` |
 | `dim_article_type` | Dimension | Content | `cnt_article` |
 | `dim_contributor_role` | Dimension | Content | `cnt_item_contributor` |
 | `dim_attribute_key` | Dimension | Content | `cnt_attribute` |
@@ -1128,31 +1244,83 @@ The numbers match the review, so references elsewhere in this document still wor
 | 6 | `tb_pages` | Decided | Articles with `parent_item_id`. 36 join the Gita Govinda collection. See 3.4 |
 | 7 | `tb_product` vs the PDF's `products` | Moved | `tb_product` is the source for `prd_product` (ADR-003) |
 | 8 | Euro prices | Decided | Empty `price_eur` column, unused until euro is supported. See 3.12 |
-| 9 | Cost codes | Decided | Clear codes map now. Unclear rows are held. Refinement to confirm (see 12.2) |
-| 10 | Trailer | Open | Question below |
-| 11 | Track type | Open | Default: `dim_track_type` table |
-| 12 | Article type | Open | Meaning of `tb_latest_updates.type_id` values 1 and 2, and `pgm_type` |
-| 13 | Text format | Open | Default: Markdown, sanitised on output |
-| 14 | Short fields | Open | Default: short text stays on `cnt_item`, longer text moves to sections |
-| 15 | Meta keywords | Open | Default: drop |
-| 16 | Category images and `mudra` fields | Open | Default: `cnt_item_media` if categories become items |
-| 17 | Status meanings | Open | Codes differ per table. Confirm each with the business owners |
+| 9 | Cost codes | Decided | `1` free, `2` paid, `3` one-time purchase, `0` private or deprecated. Package `f` = fresh purchase, `r` = renewal price. `valid_type` 0 and 1 days, 2 months, 3 years. Data checks open (see 12.2) |
+| 10 | Trailer | Decided | Option C: `trailer_item_id` on `cnt_collection`, `is_preview` on `cnt_membership`. See 3.2 and 3.5 |
+| 11 | Track type | Decided | `dim_track_type`, linked from `cnt_media.track_type_id`. See 4.1 |
+| 12 | Article type | Decided | Two types: announcement and press. `pgm_type` held (see 12.3) |
+| 13 | Text format | Decided | `html_text` (canonical, sanitised) and `markdown_text` (derived). See 3.8 |
+| 14 | Short fields | Decided | `sub_head_1` and `sub_head_2` go to `cnt_item_subtitle` (3.15). `sub_head` becomes a theme in `dim_category` (`domain = theme`) via `cnt_item_category`. `short_description` stays on `cnt_item` |
+| 15 | Meta keywords | Decided | Dropped. Tags cover discovery. Content team checks a sample first. See 3.10 |
+| 16 | Category images and `mudra` fields | Decided | Option B: category pages are collections of kind `category`, linked to `dim_category` by `category_id`. See 3.2 and 4.1 |
+| 17 | Status meanings | Decided | `0` private, `1` public, `2` deleted. Mapping in 6.9. Assumption on private to confirm |
 | 18 | Rating type codes | Moved | Engagement (ADR-005) |
-| 19 | `tb_freeclass` test rows | Open | Default: exclude test rows, listed in the exclusion report |
-| 20 | Contributor registry | Open | Depends on the Gurus group design |
-| 21 | Translations | Deferred | Content is single-language for now |
+| 19 | `tb_freeclass` test rows | Decided | Exclude "test title". Deleted real classes archived. See 6.1 |
+| 20 | Contributor registry | Decided | `usr_contributors` in the usr domain (option A). Content holds the id. See ADR-007 |
+| 21 | Translations | Decided | `language_id` is the teaching language, one per item. Translated text deferred; `cnt_item_translation` added when needed (no schema change now) |
 | 22 | Public site navigation | Moved | Open in ADR-004 |
 
 ### 12.2 Decisions to confirm
 
-- **Decision 9, refinement.** The `r` and `f` package codes affect validity and renewal, not the price amounts. So prices migrate for all 364 rows, and only the access interpretation is held. Without this split, most video prices would wait on the `r` and `f` answer.
+- **Decision 9, renewal rule.** Decided (option A): a renewal price is shown only to customers whose access has run out. It depends on an entitlements record (ADR-008).
+- **Decision 9, expiry.** Decided (option A): access ends automatically when the validity period passes. Confirm with the business that the live site already works this way (option C).
+- **Decision 9, package codes.** Corrected by the business: `f` = fresh purchase, `r` = renewal. `cnt_price` gains `price_kind` (`fresh` or `renewal`). `r` is not a subscription.
+- **Decision 9, validity.** Recorded: `valid_type` 0 and 1 = days, 2 = months, 3 = years.
+- **Decision 17, packages.** Recorded (option A): package status `3` is deleted, archived and not loaded. `0` is private and kept inactive. `1` is public and active.
+- **Decision 9, data checks before load.** 34 rows with `valid_type` 3 and `valid_days` 30 (30 years, probably a day count). 9 rows with `valid_type` 0 and `valid_days` 0. 3 rows with NULL `valid_type`, held.
+- **Decision 9, assumption to confirm.** Code `2` (paid) is a purchase whose validity comes from the package. If it's time-limited access, that's a subscription, and the mapping changes.
+- **Decision 13, HTML source of truth.** Confirmed on recommendation: `html_text` is canonical, and `markdown_text` is derived and never edited on its own.
+- **Decision 17, private.** Confirmed on recommendation: private maps to draft and hidden.
+- **Decision 12, `pgm_type`.** Held. The 59 articles load without it until its meaning is known.
 
-### 12.3 Next open question
+### 12.3 Recorded
 
-- **Decision 10, trailer.** The legacy link table marks 350 rows as trailers, across 103 programmes. 68 of those programmes have more than one. The doc's original rule of one trailer per collection doesn't match the data. The options are:
-  - **A.** Keep one flag and allow several per programme. Simple, but "trailer" keeps two meanings.
-  - **B.** Enforce one trailer per programme and clear the rest. Matches the model, but loses flags that may be intended preview lessons.
-  - **C.** Split the meaning: `trailer_item_id` on `cnt_collection` for the single hero teaser, and `is_preview` on `cnt_membership` for sample lessons. The 350 flags migrate into `is_preview`. Recommended.
+- **Decision 10 (trailers): option C.** Recorded. Sharing a hero teaser across programmes is allowed by default, pending confirmation. Deletes use `RESTRICT`.
+- **Decision 11 (track type): option A.** Recorded. `dim_track_type` is a table, linked from `cnt_media`.
+- **Decision 21 (languages and translations): option A.** Recorded. `cnt_item.language_id` is the teaching language. Translated text is deferred. A class taught in two languages would need option C later.
+- **Decision 20 (contributor registry): option A.** Recorded. `usr_contributors` is owned by usr. Content references it by id. Recorded in ADR-007.
+- **Decision 19 (free class test rows): option A.** Recorded. Exclude "test title" only. Other deleted rows are archived.
+- **Open:** items with several live packages are a fresh price plus a renewal price, not duplicates. Item 96 has three live rows (148 fresh at 400, 150 and 151 renewal at 200 and 100). Confirm that renewal prices are offered on the site.
+- **Decision 17 (status codes): `0` private, `1` public, `2` deleted.** Recorded. Mapping in 6.9. Private is taken as draft and hidden, on recommendation.
+- **Decision 16 (category pages): option B.** Recorded. Each category gets a `cnt_collection` row with `kind = category`, linked by `category_id`. The presentation content moves there. `dim_category` stays a taxonomy.
+- **Decision 15 (meta keywords): option A.** Recorded. `meta_keywords` is dropped, and `cnt_tag` covers discovery. `meta_description` stays on `cnt_item`.
+- **Decision 14 (short fields): option A for subtitles, option B for themes.** Recorded. `sub_head_1` and `sub_head_2` go to the ordered `cnt_item_subtitle` table. `sub_head` (seven themes) becomes `dim_category` with `domain = theme`, linked through `cnt_item_category`.
+- **Decision 13 (text format): option B, with both columns.** Recorded. `html_text` is canonical and sanitised on write and on output. `markdown_text` is derived from it. HTML is the source of truth, on recommendation.
+- **Decision 12 (article type): option A.** Recorded. Two types, `announcement` and `press`. Labels to be confirmed by the content team. `pgm_type` (`d` on 33 rows, empty on 26) is held until its meaning is known.
+
+### 12.4 Autonomous defaults (reversible)
+
+Applied without asking, because each one holds something back or excludes it, rather than publishing or pricing anything new. Each can be overridden by the business.
+
+- **Subtitle placeholders** ("s h 1", "s h 2") are not loaded as subtitles. They go to the exclusion report.
+- **Rating approval codes** map as: `a` approved, published. `r` rejected, hidden. `p` pending, hidden. These apply when ratings load, which still waits on ADR-005.
+- **Orphan `programme_id` rows** in `tb_programme_video` (2 rows) go to the exclusion report, not the link table.
+- **Packages with a validity anomaly** are held, not published or priced at launch: the 34 rows with 30 years, the 9 rows with 0 days, and the 3 rows with no `valid_type`.
+- **Item 96**: only its 3 live rows load. The rest are archived. Its live prices are checked against the public site before launch.
+- **Free class guru names** that don't match a contributor load with no contributor link, and are listed in the report for manual matching.
+- **Trailer sharing** is allowed, and deletes use `RESTRICT` (decision 10).
+
+Still needing a person (they change what customers pay, what is published, or what a code means): the rating `item_type` codes, the `pgm_type` meaning, the article labels, whether the live site already expires access and offers renewals, whether code `2` is time-limited, what "private" means, whether the 8,484 deleted tracks really are deleted, and whether a separate `products` table exists.
+
+### 12.5 Open for the next session
+
+These need a person. Each one is listed with the document section that holds the detail.
+
+| # | Question | Where it matters | Who answers |
+|---|---|---|---|
+| 1 | Meaning of rating `item_type` 1 and 5 | Section 6.7, ADR-005 | Product owner, checked against the live site |
+| 2 | Meaning of `pgm_type` (`d` or empty) | Section 6.5, decision 12 | Content team |
+| 3 | Article type labels: "announcement" and "press" | Section 4.1, decision 12 | Content team |
+| 4 | Does the live site expire access, and offer renewals? | Decision 9, ADR-008 | Business owner |
+| 5 | Is code `2` (paid) time-limited, which would make it a subscription? | Decision 9, section 3.12 | Business owner |
+| 6 | What does "private" mean: draft and hidden, or members-only? | Decision 17, section 6.9 | Business owner |
+| 7 | Are the 8,484 deleted music tracks really deleted? | Section 6.2, decision 17 | Music team |
+| 8 | Does a separate `products` table exist beyond `tb_product`? | ADR-003 | Whoever holds the production database |
+| 9 | Meaning of the `admin_approval` codes on ratings | ADR-005 | Product owner |
+| 10 | Validity anomalies: 34 rows at 30 years, 9 rows at 0 days, 3 with no type | Decision 9, section 12.4 | Business owner |
+| 11 | Subtitle placeholders "s h 1" and "s h 2" | Section 3.15 | Content team |
+| 12 | Live prices on item 96 against the public site | Section 12.4 | Business owner |
+
+The autonomous defaults for items 10 to 12 are in section 12.4. They hold the rows back, so nothing goes live until these are answered.
 
 ---
 
@@ -1162,7 +1330,7 @@ The numbers match the review, so references elsewhere in this document still wor
 - **Collection.** A named container of members. Programmes, albums, playlists, galleries and bundles.
 - **Media.** A playable or viewable unit with a file or an embed. Videos, tracks, photos and documents.
 - **Membership.** A placement of an item in a collection.
-- **Trailer.** The preview member of a programme or album.
+- **Trailer.** The hero teaser of a programme or album: `cnt_collection.trailer_item_id`. Sample lessons are previews: `is_preview` on membership.
 - **Contributor.** A guru, artist or producer credited on an item.
 - **Card projection.** The fields every layout needs: title, short description, cover, primary contributor, level and price.
 - **Read model.** A table that caches numbers derived from events. Rebuildable, never the source of truth.

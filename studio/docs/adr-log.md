@@ -9,9 +9,11 @@ Format: each record has a status (Accepted, Open), the context, the decision, an
 | 001 | Payments stay in revenue; content references projects | Accepted | Revenue |
 | 002 | Archive the legacy admin menu; design admin navigation afresh | Accepted | Admin |
 | 003 | `tb_product` is the source for `prd_product`; correct PDF section 12.3 | Accepted, one check open | Commerce / product |
-| 004 | Public site navigation design | Open | Composer (`cms_`) |
+| 004 | Public site navigation design | Accepted for launch, on recommendation | Composer (`cms_`) |
 | 005 | Engagement migration: rating codes and activity rows | Partly open | Engagement (`eng_`) |
 | 006 | Routing of legacy tables outside the content domain | Accepted | Cross-domain |
+| 007 | Contributor registry is owned by usr | Accepted | Identity (`usr_`) |
+| 008 | Entitlements record for renewal pricing | Accepted, design open | Transactions (`txn_`) |
 
 ---
 
@@ -70,7 +72,9 @@ Format: each record has a status (Accepted, Open), the context, the decision, an
 
 ## ADR-004: Public site navigation design
 
-**Status:** Open.
+**Status:** Accepted for launch, on recommendation. Revisit if admins need to edit menus without a deployment.
+
+**Decision (on recommendation).** For launch, the public site's navigation is defined in code: routes and menu groups live in the application, and changes ship with a release. Menu data moves into `cms_` only if admins need to change it without a deployment. This avoids building a menu editor before it's needed, and it can't point at a page that no longer exists.
 
 **Context.** The legacy data holds only the admin sidebar (ADR-002). No table describes the public site's navigation: the menus, their order, or which items show for which visitor. The page composer (`cms_`) decides what content appears, but not the navigation around it.
 
@@ -127,3 +131,50 @@ Format: each record has a status (Accepted, Open), the context, the decision, an
 | `tb_class_music_payment` | 8 | `rev_` (revenue) | Payments, see ADR-001 |
 
 **Consequences.** Each receiving domain's design must include the tables routed to it, or the routing becomes a loss. The usr, dim, txn and rev designs are the owners.
+
+---
+
+## ADR-007: Contributor registry is owned by usr
+
+**Status:** Accepted. Chosen as option A over a content-owned registry (B) and keeping the four legacy tables (C).
+
+**Context.** Gurus, music artists, artists with no login, and producers are currently in four legacy tables: `tb_guru_basics` (20 rows), `tb_music_artist` (24), `tb_other_artist` (6) and `tb_producer` (1). Content needs to credit people on items. The auth design already has `usr_contributor_links`, which connects a login account to a contributor record.
+
+**Decision.** A single `usr_contributors` table in the usr domain holds every guru, artist and producer, with a type column. Content references it by `contributor_id` through `cnt_item_contributor`. `usr_contributor_links` connects a login account to a row.
+
+**Consequences.**
+- The usr design must include `usr_contributors` and its type column.
+- Content never owns identity. It stores only the id and the role.
+- Migration merges the four legacy tables into one. Duplicates across them are reported and resolved by hand.
+- The Gurus group's design work is absorbed into this table, rather than being a separate dependency.
+
+---
+
+## ADR-008: Entitlements record for renewal pricing
+
+**Status:** Accepted in principle. The table design is open, and txn owns it.
+
+**Context.** Legacy package codes give two kinds of price. `f` is a fresh purchase. `r` is a renewal price for an existing customer whose access has run out. To show a renewal price correctly, the system must know, for each customer and item, when access started and when it ends. Nothing in the current designs records that. The orders table records what was bought, not what access it grants.
+
+**Decision.** Renewal prices are shown only to customers whose access has run out (content decision 9). The transaction domain (`txn_`) keeps an entitlements record: one row per customer, item and purchase, with the access start and end. The content model only holds the price kind (`fresh` or `renewal`).
+
+**Consequences.**
+- The txn design must include an entitlements table, linked to the order line that granted the access.
+- Renewal eligibility is read from entitlements, not from the price table.
+- Migration cannot build entitlements from legacy data alone, because the dump doesn't record access periods per customer. Until the txn design is settled, renewal prices stay inactive.
+- Access expires automatically when its validity period passes (content decision 9, option A). Expiry is enforced by a scheduled job that closes the entitlement and makes the renewal price available. The business confirms this matches the live site.
+
+---
+
+## Open questions for the next session
+
+| Record | Question | Owner |
+|---|---|---|
+| ADR-003 | Does a separate `products` table exist beyond `tb_product`? | Production database holder |
+| ADR-004 | Public site navigation: launch in code, revisit as data if admins need to edit menus | Product owner, to confirm |
+| ADR-005 | Meaning of rating `item_type` 1 and 5, and of `admin_approval` codes `a`, `r` and `p` | Product owner |
+| ADR-005 | Rating codes must be confirmed before any rating row loads | Product owner |
+| ADR-008 | Does the live site expire access and offer renewals? Table design for entitlements | Business owner, then transactions |
+
+The content-side questions are in `content-model.md`, section 12.5.
+
